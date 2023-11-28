@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/song_list_popup_add_queue"
+        android:title="Add to queue"/>
+    <item android:id="@+id/song_list_popup_artist"
+        android:title="View artist"/>
+    <item android:id="@+id/song_list_popup_album"
+        android:title="View album"/>
+</menu>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_current_album_song_row"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <LinearLayout
+        android:id="@+id/ll_current_album_song_row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:orientation="horizontal"
+            android:paddingRight="20dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_current_album_list_index"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:fontFamily="@font/noto_sans"
+                android:includeFontPadding="false"
+                android:text="10"
+                android:textAlignment="center"
+                android:textColor="@color/list_font_large"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:id="@+id/tv_current_album_list_title"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:fontFamily="@font/noto_sans"
+                android:includeFontPadding="false"
+                android:text="TextView"
+                android:textColor="@color/list_font_large"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            android:paddingRight="40dp">
+
+            <View
+                android:layout_width="60dp"
+                android:layout_height="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/separator"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="20dp"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
