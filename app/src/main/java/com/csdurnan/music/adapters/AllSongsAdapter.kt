@@ -30,11 +30,11 @@ import com.csdurnan.music.fragments.AllSongsDirections
 import com.csdurnan.music.fragments.CurrentSong
 import java.io.FileNotFoundException
 
-class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fragment, private val onSongsItemClickListener: OnSongsItemClickListener) : RecyclerView.Adapter<AllSongsAdapter.ViewHolder>() {
+class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fragment, private val onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) : RecyclerView.Adapter<AllSongsAdapter.AllSongsViewHolder>() {
     /**
      * Provides a reference to the type of views that we will be using.
      */
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class AllSongsViewHolder(view: View, private val onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener?) : RecyclerView.ViewHolder(view) {
         val songName: TextView
         val artistName: TextView
         val image: ImageView
@@ -56,6 +56,39 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
                 popupMenu.show()
             }
         }
+
+        fun bind(song: Song) {
+            songName.text = song.title
+            artistName.text = song.artist
+
+            row.setOnClickListener {
+                val action = AllSongsDirections.actionGlobalCurrentSong(song.id)
+                it.findNavController().navigate(action)
+            }
+
+            popupMenu.setOnMenuItemClickListener {item ->
+                when (item.itemId) {
+                    R.id.song_list_popup_add_queue -> {
+                        onSongsItemClickListener?.onItemClick(item.itemId, song)
+                        true
+                    }
+                    R.id.song_list_popup_artist -> {
+                        onSongsItemClickListener?.onItemClick(item.itemId, song)
+                        true
+                    }
+                    R.id.song_list_popup_album -> {
+                        onSongsItemClickListener?.onItemClick(item.itemId, song)
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+//            Glide.with(view)
+//                .load(songList[position].imageUri)
+//                .placeholder(R.drawable.image)
+//                .into(holder.image)
+        }
     }
 
     /**
@@ -63,9 +96,9 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
      * This method creates and initializes a ViewHolder and its associated view.
      * It does not fill in the view's contents with any specific data.
      */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllSongsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.songs_all_list_row, parent, false)
-        return ViewHolder(view)
+        return AllSongsViewHolder(view, onSongsItemClickListener)
     }
 
     /**
@@ -80,7 +113,7 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
      * RecyclerView calls this method to associate a ViewHolder with data.
      * This method fetches appropriate data and uses it to fill in the layout.
      */
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AllSongsViewHolder, position: Int) {
         holder.songName.text = songList[position].title
         holder.artistName.text = songList[position].artist
 

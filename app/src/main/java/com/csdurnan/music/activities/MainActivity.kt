@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
     /**
      * MainActivity function implementations.
      */
-
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStart() {
         super.onStart()
