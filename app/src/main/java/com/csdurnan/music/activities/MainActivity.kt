@@ -1,27 +1,30 @@
 package com.csdurnan.music.activities
 
 import android.Manifest
-import android.content.*
+import android.content.ComponentName
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.util.Log
 import android.util.Size
 import android.view.View
-import android.widget.*
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.csdurnan.music.ContentManagement
@@ -29,8 +32,12 @@ import com.csdurnan.music.MainNavDirections
 import com.csdurnan.music.R
 import com.csdurnan.music.adapters.AllSongsAdapter
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.fragments.AllSongsDirections
-import com.csdurnan.music.utils.*
+import com.csdurnan.music.ui.currentSong.SongSelectorViewModel
+import com.csdurnan.music.ui.songs.AllSongsDirections
+import com.csdurnan.music.utils.MainActivityCurrentSongBarCallback
+import com.csdurnan.music.utils.MusicBinder
+import com.csdurnan.music.utils.MusicService
+import com.csdurnan.music.utils.UpdateUiBroadcastReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, AllSongsAdapter.OnSongsItemClickListener {
@@ -58,7 +65,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
     }
 
     /** Updates the musicService with the selected song. */
-    private val viewModel: ItemViewModel by viewModels()
+    private val viewModel: SongSelectorViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun songPicked(song: Int) {
@@ -100,18 +107,14 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
                 bindService(playIntent, musicConnection, BIND_AUTO_CREATE)
                 startService(playIntent)
             }
-            println("------ permission granted")
+            Log.i("MainActivity.kt", "Android permissions granted.")
         } else {
             // Permission is not granted, request it
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
-            finish();
-            startActivity(intent);
-            println("------ permission not granted")
+            finish()
+            startActivity(intent)
+            Log.i("MainActivity.kt", "Android permissions not granted.")
         }
-
-
-
-
 
         setContentView(R.layout.activity_main)
 
@@ -128,6 +131,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
+        val headerText = findViewById<TextView>(R.id.tv_header)
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigation.setupWithNavController(navController)
 
@@ -135,17 +139,21 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
             when (item.itemId) {
                 R.id.artists -> {
                     navController.navigate(R.id.artists)
+                    headerText.text = "Artists"
                     true
                 }
                 R.id.albums -> {
                     navController.navigate(R.id.albums)
+                    headerText.text = "Albums"
                     true
                 }
                 R.id.songs -> {
                     navController.navigate(R.id.songs)
+                    headerText.text = "Songs"
                     true
                 }
                 else -> false
+
             }
         }
 
@@ -157,6 +165,11 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
                 songBarVisibility(View.VISIBLE)
                 handler.post(currentPositionTimer)
             }
+            if (destination.id != R.id.artists
+                && destination.id != R.id.albums
+                && destination.id != R.id.songs) {
+                headerText.text = ""
+            }
         }
 
         /** Sets up navigation from the currentSongBar to the CurrentSong fragment. */
@@ -167,6 +180,29 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
             if (songId != null) {
                 val action = MainNavDirections.actionGlobalCurrentSong(0L)
                 navController.navigate(action)
+            }
+        }
+
+        val playPauseButton = findViewById<ImageView>(R.id.iv_current_song_play_pause)
+        playPauseButton.setOnClickListener {
+            if (musicService?.isPlaying() == true) {
+                musicService?.pauseSong()
+                playPauseButton?.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.baseline_play_arrow_24,
+                        null
+                    )
+                )
+            } else {
+                musicService?.resumeSong()
+                playPauseButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.baseline_pause_24,
+                        null
+                    )
+                )
             }
         }
     }
@@ -187,19 +223,17 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
 
         val currentSongImg = findViewById<ImageView>(R.id.iv_current_song_image)
         if (currentSong != null) {
-            if (currentSong.uri != null) {
-                val trackUri = currentSong.uri
-                val cr = contentResolver
+            val trackUri = currentSong.uri
+            val cr = contentResolver
 
-                var bm: Bitmap? = null
-                if (cr != null) {
-                    bm = trackUri?.let { cr.loadThumbnail(it, Size(1024, 1024), null) }
-                }
-
-                currentSongImg.setImageBitmap(bm)
-                currentSongImg.scaleType =
-                    ImageView.ScaleType.FIT_CENTER
+            var bm: Bitmap? = null
+            if (cr != null) {
+                bm = trackUri.let { cr.loadThumbnail(it, Size(1024, 1024), null) }
             }
+
+            currentSongImg.setImageBitmap(bm)
+            currentSongImg.scaleType =
+                ImageView.ScaleType.FIT_CENTER
         }
     }
 
@@ -209,7 +243,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
      */
     private fun songBarVisibility(visibility: Int) {
         val currentSongBar = findViewById<ConstraintLayout>(R.id.cl_current_song_bar)
-        if (visibility == View.VISIBLE && musicService?.isPlaying() == true) {
+        if (visibility == View.VISIBLE && (musicService?.isPlaying() == true || musicService?.isPaused() == true)) {
             currentSongBar.visibility = View.VISIBLE
         } else if (visibility == View.GONE) {
             currentSongBar.visibility = visibility
@@ -222,7 +256,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
             runOnUiThread {
                 if (musicBound) {
                     if (musicService?.isPlaying() == true) {
-                        var bar = findViewById<ProgressBar>(R.id.pb_current_song_progress)
+                        val bar = findViewById<ProgressBar>(R.id.pb_current_song_progress)
                         bar?.max = musicService?.songInfo()?.duration!!
                         bar?.progress = musicService?.currentPosition()!!
                     }
@@ -257,7 +291,6 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
                     val action = AllSongsDirections.actionGlobalCurrentAlbum(cm.albumsList[song.albumId]!!)
                     navController.navigate(action)
                 }
-                else -> false
             }
         }
 }

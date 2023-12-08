@@ -23,7 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.AlbumPageActivity"/>
         <service android:name=".utils.MusicService"
             android:enabled="true"
             android:exported="true">

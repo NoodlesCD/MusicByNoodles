@@ -1,9 +1,10 @@
 package com.csdurnan.music.utils
 
 import android.app.Service
-import android.content.*
+import android.content.ContentUris
+import android.content.Context
+import android.content.Intent
 import android.media.AudioAttributes
-import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
@@ -13,7 +14,8 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.csdurnan.music.dc.Song
-import java.util.*
+import java.util.LinkedList
+import java.util.Queue
 
 class MusicService :
     Service(),
@@ -52,7 +54,7 @@ class MusicService :
 
             /** Lost focus for a short time but can play at a lower volume. */
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                mediaPlayer?.setVolume(0.1F, 0.1F)
+                mediaPlayer.setVolume(0.1F, 0.1F)
             }
         }
     }
@@ -77,10 +79,11 @@ class MusicService :
     private var songPosition = 0L
     private var song: Song? = null
     private var songQueue: Queue<Long> = LinkedList()
+    private var isPaused: Boolean = false
 
     private val musicBinder: IBinder = MusicBinder(this)
 
-    override fun onBind(p0: Intent?): IBinder? {
+    override fun onBind(p0: Intent?): IBinder {
         return musicBinder
     }
 
@@ -95,7 +98,7 @@ class MusicService :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPrepared(p0: MediaPlayer?) {
         if (requestAudioFocus()) {
-            mediaPlayer?.start()
+            mediaPlayer.start()
             Log.i("MusicService.kt", "Audio focus granted.")
         } else {
             Log.e("MusicService.kt", "Unable to request audio focus.")
@@ -154,11 +157,13 @@ class MusicService :
         }
 
         mediaPlayer.prepare()
+        isPaused = false
     }
 
     fun pauseSong() {
         if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
+            isPaused = true
         }
     }
 
@@ -200,6 +205,10 @@ class MusicService :
         return mediaPlayer.isPlaying
     }
 
+    fun isPaused(): Boolean {
+        return isPaused
+    }
+
     fun currentPosition(): Int {
         return mediaPlayer.currentPosition
     }
@@ -216,7 +225,7 @@ class MusicService :
         if (songsMap[songPosition++] != null) {
             nextSong()
         } else {
-            pauseSong()
+            mediaPlayer.stop()
         }
     }
 

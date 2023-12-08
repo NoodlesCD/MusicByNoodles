@@ -1,10 +1,10 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.ui.currentSong
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ItemViewModel : ViewModel() {
+class SongSelectorViewModel : ViewModel() {
     private val mutableSelectedItem = MutableLiveData<Int>()
     val selectedItem: LiveData<Int> get() = mutableSelectedItem
 

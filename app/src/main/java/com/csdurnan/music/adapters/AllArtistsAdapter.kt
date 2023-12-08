@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Artist
-import com.csdurnan.music.fragments.AllAlbumsDirections
-import com.csdurnan.music.fragments.AllArtistsDirections
+import com.csdurnan.music.ui.albums.AllAlbumsDirections
+import com.csdurnan.music.ui.artists.AllArtistsDirections
 
 class AllArtistsAdapter(private val artistList: ArrayList<Artist>, private val fragment: Fragment) : RecyclerView.Adapter<AllArtistsAdapter.ViewHolder>() {
     /**

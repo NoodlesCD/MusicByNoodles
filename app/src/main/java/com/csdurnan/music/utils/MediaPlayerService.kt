@@ -42,9 +42,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener, MediaPlaye
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
         var result = audioManager?.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
 
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) return true
-
-        return false
+        return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
 
     private fun removeAudioFocus(): Boolean {
@@ -111,9 +109,6 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener, MediaPlaye
                 stopSelf()
             }
 
-            override fun onSeekTo(pos: Long) {
-                super.onSeekTo(pos)
-            }
         })
     }
 
@@ -199,7 +194,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener, MediaPlaye
     }
 
     fun handleIncomingActions(playbackAction: Intent) {
-        if (playbackAction?.action == null) return
+        if (playbackAction.action == null) return
 
         var action = playbackAction.action
 
@@ -219,7 +214,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener, MediaPlaye
     private var mediaFile: String = ""
 
 
-    override fun onBind(intent: Intent?): IBinder? {
+    override fun onBind(intent: Intent?): IBinder {
         return binder
     }
 
@@ -293,12 +288,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener, MediaPlaye
         unregisterReceiver(playNewAudio)
     }
 
-    override fun onCreate() {
-        super.onCreate()
-//        register_playNewAudio()
-    }
-
-//    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    //    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 //        val mediaUri = intent?.getStringExtra("MEDIA_URI")
 //        if (mediaUri != null) {
 //            try {

@@ -1,9 +1,9 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.ui.songs
 
 import androidx.recyclerview.widget.DiffUtil
 import com.csdurnan.music.dc.Song
 
-object SongsListComparator : DiffUtil.ItemCallback<Song>() {
+object AllSongsListComparator : DiffUtil.ItemCallback<Song>() {
     override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
         return oldItem.id == newItem.id
     }

@@ -1,15 +1,14 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.ui.songs
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import com.csdurnan.music.R
 import com.csdurnan.music.adapters.AllSongsAdapter
 import com.csdurnan.music.dc.Song
 
-class AllSongsPagingAdapter(diffCallback: DiffUtil.ItemCallback<Song>, var onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) :
-    PagingDataAdapter<Song, AllSongsViewHolder>(diffCallback){
+class AllSongsPagingAdapter(var onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) :
+    PagingDataAdapter<Song, AllSongsViewHolder>(AllSongsListComparator){
 
     override fun onBindViewHolder(holder: AllSongsViewHolder, position: Int) {
         val item = getItem(position)
@@ -19,6 +18,8 @@ class AllSongsPagingAdapter(diffCallback: DiffUtil.ItemCallback<Song>, var onSon
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllSongsViewHolder {
-        return AllSongsViewHolder(parent, onSongsItemClickListener)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.songs_all_list_row, parent, false)
+        return AllSongsViewHolder(view, onSongsItemClickListener)
     }
+
 }

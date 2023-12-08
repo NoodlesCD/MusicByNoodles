@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.R
-import com.csdurnan.music.adapters.ArtistAlbumListAdapter
 import com.csdurnan.music.adapters.CurrentArtistAdapter
 
 /**
@@ -28,10 +27,6 @@ class CurrentArtist : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(

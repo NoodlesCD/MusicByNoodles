@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AllArtists"
+    tools:context=".ui.artists.AllArtists"
     android:tag="all_artists_fragment"
     android:id="@+id/frag_all_artists">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="artists" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_all_artists_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingBottom="120dp"
+        android:paddingTop="90dp"
+        android:clipToPadding="false"/>
 </FrameLayout>

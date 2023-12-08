@@ -48,8 +48,9 @@ class CurrentArtistAdapter(private val albumList: MutableList<Album>, private va
 
         var songsList = holder.songsList
         songsList.layoutManager = LinearLayoutManager(holder.context)
-        songsList.setHasFixedSize(true)
-        songsList.adapter = holder.context?.let { CurrentArtistSongsAdapter(albumList[position].songs, fragment) }
+        //songsList.setHasFixedSize(true)
+        songsList.adapter =
+            holder.context.let { CurrentArtistSongsAdapter(albumList[position].songs, fragment) }
 
         Glide.with(fragment)
             .load(albumList[position].albumUri)

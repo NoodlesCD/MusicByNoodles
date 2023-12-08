@@ -13,4 +13,11 @@
         <item name="android:statusBarColor">#0E0E0E</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+    <style name="menuStyle">
+        <item name="android:layoutDirection">rtl</item>
+    </style>
 </resources>

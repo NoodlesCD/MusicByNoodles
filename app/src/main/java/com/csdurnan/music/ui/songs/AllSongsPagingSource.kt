@@ -1,8 +1,7 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.ui.songs
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.dc.Song
 
 class AllSongsPagingSource(private val songsList: List<Song>) : PagingSource<Int, Song>() {

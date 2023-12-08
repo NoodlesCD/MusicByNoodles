@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/songs"
-        android:name="com.csdurnan.music.fragments.AllSongs"
+        android:name="com.csdurnan.music.ui.songs.AllSongs"
         android:label="Songs"
         tools:layout="@layout/fragment_all_songs" >
         <action
@@ -25,7 +25,9 @@
             app:destination="@id/albums" />
         <action
             android:id="@+id/action_allSongs_to_allArtists"
-            app:destination="@id/artists" />
+            app:destination="@id/artists"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_allSongs_to_currentSong"
             app:destination="@id/currentSong" />
@@ -38,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/artists"
-        android:name="com.csdurnan.music.fragments.AllArtists"
+        android:name="com.csdurnan.music.ui.artists.AllArtists"
         android:label="Artists"
         tools:layout="@layout/fragment_all_artists" >
         <action
@@ -49,32 +51,38 @@
             app:destination="@id/songs" />
         <action
             android:id="@+id/action_allArtists_to_allAlbums"
-            app:destination="@id/albums" />
+            app:destination="@id/albums"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_artists_to_currentArtist"
             app:destination="@id/currentArtist" />
     </fragment>
     <fragment
         android:id="@+id/albums"
-        android:name="com.csdurnan.music.fragments.AllAlbums"
+        android:name="com.csdurnan.music.ui.albums.AllAlbums"
         android:label="Albums"
         tools:layout="@layout/fragment_all_albums" >
         <action
             android:id="@+id/action_allAlbums_to_allSongs"
-            app:destination="@id/songs" />
+            app:destination="@id/songs"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_allAlbums_to_currentSong"
             app:destination="@id/currentSong" />
         <action
             android:id="@+id/action_allAlbums_to_allArtists"
-            app:destination="@id/artists" />
+            app:destination="@id/artists"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_AllAlbums_to_currentAlbum"
             app:destination="@id/currentAlbum" />
     </fragment>
     <fragment
         android:id="@+id/currentSong"
-        android:name="com.csdurnan.music.fragments.CurrentSong"
+        android:name="com.csdurnan.music.ui.currentSong.CurrentSong"
         android:label="fragment_current_song"
         tools:layout="@layout/fragment_current_song" >
         <argument

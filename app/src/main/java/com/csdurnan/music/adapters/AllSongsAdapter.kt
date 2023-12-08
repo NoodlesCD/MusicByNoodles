@@ -1,40 +1,27 @@
 package com.csdurnan.music.adapters
 
-import android.content.ContentUris
-import android.content.Context
-import android.graphics.Bitmap
-import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
-import android.util.Size
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.fragments.AllArtistsDirections
-import com.csdurnan.music.fragments.AllSongsDirections
-import com.csdurnan.music.fragments.CurrentSong
-import java.io.FileNotFoundException
+import com.csdurnan.music.ui.songs.AllSongsDirections
 
-class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fragment, private val onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) : RecyclerView.Adapter<AllSongsAdapter.AllSongsViewHolder>() {
+class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fragment, private val onSongsItemClickListener: OnSongsItemClickListener) : RecyclerView.Adapter<AllSongsAdapter.AllSongsViewHolder>() {
     /**
      * Provides a reference to the type of views that we will be using.
      */
-    class AllSongsViewHolder(view: View, private val onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener?) : RecyclerView.ViewHolder(view) {
+    class AllSongsViewHolder(view: View, private val onSongsItemClickListener: OnSongsItemClickListener?) : RecyclerView.ViewHolder(view) {
         val songName: TextView
         val artistName: TextView
         val image: ImageView

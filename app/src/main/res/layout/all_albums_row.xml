@@ -24,15 +24,16 @@
         android:paddingLeft="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_all_albums_row_image"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/tv_all_albums_row_title"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="20dp"
             android:text="TextView"
             android:textColor="@color/list_font_large"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_all_albums_row_artist"

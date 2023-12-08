@@ -1,4 +1,4 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.ui.songs
 
 import android.view.Gravity
 import android.view.View
@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.adapters.AllSongsAdapter
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.fragments.AllSongsDirections
 
-class AllSongsViewHolder(view: View, private val onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) : RecyclerView.ViewHolder(view) {
+class AllSongsViewHolder(val view: View, private val onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) : RecyclerView.ViewHolder(view) {
     val songName: TextView
     val artistName: TextView
     val image: ImageView
@@ -34,6 +34,7 @@ class AllSongsViewHolder(view: View, private val onSongsItemClickListener: AllSo
         popupMenuButton.setOnClickListener {
             popupMenu.gravity = Gravity.END
             popupMenu.show()
+
         }
     }
 
@@ -49,24 +50,26 @@ class AllSongsViewHolder(view: View, private val onSongsItemClickListener: AllSo
         popupMenu.setOnMenuItemClickListener {item ->
             when (item.itemId) {
                 R.id.song_list_popup_add_queue -> {
-                    onSongsItemClickListener?.onItemClick(item.itemId, song)
+                    onSongsItemClickListener.onItemClick(item.itemId, song)
                     true
                 }
                 R.id.song_list_popup_artist -> {
-                    onSongsItemClickListener?.onItemClick(item.itemId, song)
+                    onSongsItemClickListener.onItemClick(item.itemId, song)
                     true
                 }
                 R.id.song_list_popup_album -> {
-                    onSongsItemClickListener?.onItemClick(item.itemId, song)
+                    onSongsItemClickListener.onItemClick(item.itemId, song)
                     true
                 }
                 else -> false
             }
         }
 
-//            Glide.with(view)
-//                .load(songList[position].imageUri)
-//                .placeholder(R.drawable.image)
-//                .into(holder.image)
+
+
+        Glide.with(view)
+            .load(song.imageUri)
+            .placeholder(R.drawable.image)
+            .into(image)
     }
 }

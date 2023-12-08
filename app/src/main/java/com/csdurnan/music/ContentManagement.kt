@@ -3,7 +3,6 @@ package com.csdurnan.music
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -11,9 +10,9 @@ import androidx.annotation.RequiresApi
 import com.csdurnan.music.dc.Album
 import com.csdurnan.music.dc.Artist
 import com.csdurnan.music.dc.Song
+import com.csdurnan.music.ui.songs.AllSongsPagingSource
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.FileNotFoundException
 
 @RequiresApi(Build.VERSION_CODES.Q)
 class ContentManagement(contentResolver: ContentResolver) {
@@ -27,7 +26,7 @@ class ContentManagement(contentResolver: ContentResolver) {
             launch {
                 val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                 // Creates an instance of the ContentResolver. The contentResolver property is part of the 'Context' class
-                var cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
+                val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
 
                 when {
                     cursor == null -> {
@@ -62,15 +61,15 @@ class ContentManagement(contentResolver: ContentResolver) {
                                 ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
                             val cr = contentResolver
 
-                            var bm: Bitmap? = null
-                            if (cr != null) {
-                                try {
-                                    bm = cr.loadThumbnail(trackUri, android.util.Size(2048, 2048), null)
-                                } catch (ex: FileNotFoundException) {
-
-                                }
-
-                            }
+//                            var bm: Bitmap? = null
+//                            if (cr != null) {
+//                                try {
+//                                    bm = cr.loadThumbnail(trackUri, android.util.Size(2048, 2048), null)
+//                                } catch (ex: FileNotFoundException) {
+//
+//                                }
+//
+//                            }
 
                             val sArtworkUri: Uri = Uri.parse("content://media/external/audio/albumart")
                             val imgUri: Uri = ContentUris.withAppendedId(
@@ -129,7 +128,12 @@ class ContentManagement(contentResolver: ContentResolver) {
 
     val artists = ArrayList<Artist>(artistsList.values)
     val albums = ArrayList<Album>(albumsList.values)
+
     val songs = ArrayList<Song>(songsList)
     val songsSorted = songs.sortedBy { it.title }
+
+    fun allSongsPagingSource(): AllSongsPagingSource {
+        return AllSongsPagingSource(songsSorted)
+    }
 
 }

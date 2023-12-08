@@ -1,6 +1,10 @@
-package com.csdurnan.music.fragments
+package com.csdurnan.music.ui.currentSong
 
-import android.content.*
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -19,8 +23,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.csdurnan.music.R
-import com.csdurnan.music.utils.*
-import java.util.*
+import com.csdurnan.music.utils.MusicBinder
+import com.csdurnan.music.utils.MusicService
+import com.csdurnan.music.utils.UpdateUiBroadcastReceiver
 
 /**
  * A simple [Fragment] subclass.
@@ -86,7 +91,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
     }
 
     /** Communicates with the MainActivity. Used for setting the song to play. */
-    private val viewModel: ItemViewModel by activityViewModels()
+    private val viewModel: SongSelectorViewModel by activityViewModels()
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -102,15 +107,46 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
         val broadcastReceiver = UpdateUiBroadcastReceiver(this, null)
         context?.registerReceiver(broadcastReceiver, IntentFilter("UPDATE_UI"))
 
-        if (songId != null) {
-            /** Clicking on the CurrentSong bar on the main menus will pass a value of 0L. */
-            if (songId != 0L) {
-                viewModel.selectSong(songId.toInt())
+        /** Clicking on the CurrentSong bar on the main menus will pass a value of 0L. */
+        if (songId != 0L) {
+            viewModel.selectSong(songId.toInt())
+        }
+
+        /** Play/Pause button functionality */
+        val pauseButton = view.findViewById<ImageView>(R.id.ivPlayButton)
+        pauseButton.setImageDrawable(
+            ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.baseline_pause_24,
+                null
+            )
+        )
+        pauseButton.setOnClickListener {
+            if (musicService.isPlaying()) {
+                musicService.pauseSong()
+                pauseButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.baseline_play_arrow_24,
+                        null
+                    )
+                )
+            } else {
+                musicService.resumeSong()
+                pauseButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.baseline_pause_24,
+                        null
+                    )
+                )
             }
+        }
 
-
-            /** Play/Pause button functionality */
-            val pauseButton = view.findViewById<ImageView>(R.id.ivPlayButton)
+        /** Previous/Next song functionality */
+        view.findViewById<ImageView>(R.id.ivRewindButton).setOnClickListener {
+            musicService.previousSong()
+            updateUi()
             pauseButton.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
@@ -118,72 +154,38 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
                     null
                 )
             )
-            pauseButton.setOnClickListener {
-                if (musicService.isPlaying()) {
-                    musicService.pauseSong()
-                    pauseButton.setImageDrawable(
-                        ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.baseline_play_arrow_24,
-                            null
-                        )
-                    )
-                } else {
-                    musicService.resumeSong()
-                    pauseButton.setImageDrawable(
-                        ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.baseline_pause_24,
-                            null
-                        )
-                    )
-                }
-            }
-
-            /** Previous/Next song functionality */
-            view.findViewById<ImageView>(R.id.ivRewindButton).setOnClickListener {
-                musicService.previousSong()
-                updateUi()
-                pauseButton.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.baseline_pause_24,
-                        null
-                    )
+        }
+        view.findViewById<ImageView>(R.id.ivFastForwardButton).setOnClickListener {
+            musicService.nextSong()
+            updateUi()
+            pauseButton.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.baseline_pause_24,
+                    null
                 )
-            }
-            view.findViewById<ImageView>(R.id.ivFastForwardButton).setOnClickListener {
-                musicService.nextSong()
-                updateUi()
-                pauseButton.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.baseline_pause_24,
-                        null
-                    )
-                )
-            }
+            )
+        }
 
-            /** Progress bar functionality */
-            val bar = view?.findViewById<SeekBar>(R.id.sbSongPositionBar)
-            bar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean
-                ) {
-                    if (fromUser) {
-                        musicService.seekTo(progress)
-                        activity?.runOnUiThread {
-                            val currentTime = view?.findViewById<TextView>(R.id.tvSongCurrentTime)
-                            currentTime?.text = timeLabel(progress)
-                        }
+        /** Progress bar functionality */
+        val bar = view?.findViewById<SeekBar>(R.id.sbSongPositionBar)
+        bar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                if (fromUser) {
+                    musicService.seekTo(progress)
+                    activity?.runOnUiThread {
+                        val currentTime = view.findViewById<TextView>(R.id.tvSongCurrentTime)
+                        currentTime?.text = timeLabel(progress)
                     }
                 }
-                override fun onStartTrackingTouch(p0: SeekBar?) {}
-                override fun onStopTrackingTouch(p0: SeekBar?) {}
-            })
-        }
+            }
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
+        })
 
         return view
     }
@@ -197,26 +199,24 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
     /** Updates the UI components based on the current song. */
     @RequiresApi(Build.VERSION_CODES.Q)
     fun updateUi() {
-        var currentSong = musicService.songInfo()
+        val currentSong = musicService.songInfo()
 
         view?.findViewById<TextView>(R.id.tvSongTitle)?.text = currentSong?.title
         view?.findViewById<TextView>(R.id.tvArtistTitle)?.text = currentSong?.artist
         view?.findViewById<SeekBar>(R.id.sbSongPositionBar)?.max = currentSong?.duration!!
         view?.findViewById<TextView>(R.id.tvSongTotalTime)?.text = timeLabel(currentSong.duration)
 
-        if (currentSong.uri != null) {
-            val trackUri = currentSong.uri
-            val cr = context?.contentResolver
+        val trackUri = currentSong.uri
+        val cr = context?.contentResolver
 
-            var bm: Bitmap? = null
-            if (cr != null) {
-                bm = trackUri?.let { cr.loadThumbnail(it, Size(2048, 2048), null) }
-            }
-
-            view?.findViewById<ImageView>(R.id.ivSongImageView)?.setImageBitmap(bm)
-            view?.findViewById<ImageView>(R.id.ivSongImageView)?.scaleType =
-                ImageView.ScaleType.FIT_CENTER
+        var bm: Bitmap? = null
+        if (cr != null) {
+            bm = trackUri.let { cr.loadThumbnail(it, Size(2048, 2048), null) }
         }
+
+        view?.findViewById<ImageView>(R.id.ivSongImageView)?.setImageBitmap(bm)
+        view?.findViewById<ImageView>(R.id.ivSongImageView)?.scaleType =
+            ImageView.ScaleType.FIT_CENTER
     }
 
     /** Generates a time label of mm:ss */
