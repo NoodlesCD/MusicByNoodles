@@ -36,7 +36,9 @@
             android:includeFontPadding="false"
             android:text="TextView"
             android:textColor="@color/list_font_large"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:ellipsize="end"
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/tv_songs_all_list_artist"
@@ -45,7 +47,9 @@
             android:fontFamily="@font/noto_sans"
             android:text="TextView"
             android:textColor="@color/list_font_small"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
     </LinearLayout>
 

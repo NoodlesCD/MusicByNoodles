@@ -1,6 +1,7 @@
 package com.csdurnan.music.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
@@ -11,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import android.util.Size
 import android.view.View
@@ -24,13 +26,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.MainNavDirections
 import com.csdurnan.music.R
 import com.csdurnan.music.adapters.AllSongsAdapter
+import com.csdurnan.music.adapters.CurrentAlbumAdapter
 import com.csdurnan.music.dc.Song
 import com.csdurnan.music.ui.currentSong.SongSelectorViewModel
 import com.csdurnan.music.ui.songs.AllSongsDirections
@@ -40,13 +42,12 @@ import com.csdurnan.music.utils.MusicService
 import com.csdurnan.music.utils.UpdateUiBroadcastReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, AllSongsAdapter.OnSongsItemClickListener {
+class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, AllSongsAdapter.OnSongsItemClickListener, CurrentAlbumAdapter.OnAlbumItemClickListener {
 
     /** Sets up the musicService whenever a song is selected for the first time.. */
     private var musicService: MusicService? = null
     private var playIntent: Intent? = null
     private var musicBound = false
-    private val handler = Handler()
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private val musicConnection: ServiceConnection = object : ServiceConnection {
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
         super.onDestroy()
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,9 +121,9 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
         setContentView(R.layout.activity_main)
 
         /** Observes for whenever a user selects a song. */
-        viewModel.selectedItem.observe(this, Observer { item ->
+        viewModel.selectedItem.observe(this) { item ->
             songPicked(item)
-        })
+        }
 
         /** Sets up a broadcastReceiver which the musicService uses to notify of a needed UI change. */
         val broadcastReceiver = UpdateUiBroadcastReceiver(null, this)
@@ -139,17 +141,17 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
             when (item.itemId) {
                 R.id.artists -> {
                     navController.navigate(R.id.artists)
-                    headerText.text = "Artists"
+                    headerText.text = getString(R.string.artists)
                     true
                 }
                 R.id.albums -> {
                     navController.navigate(R.id.albums)
-                    headerText.text = "Albums"
+                    headerText.text = getString(R.string.albums)
                     true
                 }
                 R.id.songs -> {
                     navController.navigate(R.id.songs)
-                    headerText.text = "Songs"
+                    headerText.text = getString(R.string.songs)
                     true
                 }
                 else -> false
@@ -163,12 +165,15 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
                 songBarVisibility(View.GONE)
             } else {
                 songBarVisibility(View.VISIBLE)
-                handler.post(currentPositionTimer)
+                Handler(Looper.getMainLooper()).post(currentPositionTimer)
             }
             if (destination.id != R.id.artists
                 && destination.id != R.id.albums
                 && destination.id != R.id.songs) {
                 headerText.text = ""
+                findViewById<View>(R.id.v_top_shadow).visibility = View.GONE
+            } else {
+                findViewById<View>(R.id.v_top_shadow).visibility = View.VISIBLE
             }
         }
 
@@ -263,7 +268,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
                 }
             }
 
-            handler.postDelayed(this, 1000)
+            Handler(Looper.getMainLooper()).postDelayed(this, 1000)
         }
     }
 
@@ -273,7 +278,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
      * Provides functionality for an additional action list for each song.
      */
     @RequiresApi(Build.VERSION_CODES.Q)
-    override fun onItemClick(position:Int, song: Song) {
+    override fun onSongItemClick(position:Int, song: Song) {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
@@ -293,4 +298,22 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
                 }
             }
         }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    override fun onAlbumItemClick(position: Int, song: Song) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        val cm = ContentManagement(applicationContext.contentResolver)
+
+        when (position) {
+            R.id.song_list_popup_add_queue -> {
+                musicService?.addToQueue(song.id)
+            }
+            R.id.song_list_popup_artist -> {
+                val action = AllSongsDirections.actionGlobalCurrentArtist(cm.artistsList[song.artistId]!!)
+                navController.navigate(action)
+            }
+        }
+    }
 }

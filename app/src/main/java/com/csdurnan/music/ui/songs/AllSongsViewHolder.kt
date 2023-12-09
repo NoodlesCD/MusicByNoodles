@@ -1,6 +1,5 @@
 package com.csdurnan.music.ui.songs
 
-import android.view.Gravity
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -15,26 +14,17 @@ import com.csdurnan.music.adapters.AllSongsAdapter
 import com.csdurnan.music.dc.Song
 
 class AllSongsViewHolder(val view: View, private val onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) : RecyclerView.ViewHolder(view) {
-    val songName: TextView
-    val artistName: TextView
-    val image: ImageView
-    val row: ConstraintLayout
-    val popupMenuButton: ImageButton
-    val popupMenu: PopupMenu
+    private val songName: TextView = view.findViewById(R.id.tv_songs_all_list_title)
+    private val artistName: TextView = view.findViewById(R.id.tv_songs_all_list_artist)
+    val image: ImageView = view.findViewById(R.id.iv_all_songs_row_image)
+    private val row: ConstraintLayout = view.findViewById(R.id.cl_all_songs_list_row)
+    private val popupMenuButton: ImageButton = view.findViewById(R.id.ib_songs_all_list_button)
+    private val popupMenu: PopupMenu = PopupMenu(view.context, popupMenuButton)
 
     init {
-        songName = view.findViewById(R.id.tv_songs_all_list_title)
-        artistName = view.findViewById(R.id.tv_songs_all_list_artist)
-        image = view.findViewById(R.id.iv_all_songs_row_image)
-        row = view.findViewById(R.id.cl_all_songs_list_row)
-        popupMenuButton = view.findViewById(R.id.ib_songs_all_list_button)
-        popupMenu = PopupMenu(view.context, view)
         popupMenu.inflate(R.menu.song_list_popup)
-
         popupMenuButton.setOnClickListener {
-            popupMenu.gravity = Gravity.END
             popupMenu.show()
-
         }
     }
 
@@ -50,22 +40,20 @@ class AllSongsViewHolder(val view: View, private val onSongsItemClickListener: A
         popupMenu.setOnMenuItemClickListener {item ->
             when (item.itemId) {
                 R.id.song_list_popup_add_queue -> {
-                    onSongsItemClickListener.onItemClick(item.itemId, song)
+                    onSongsItemClickListener.onSongItemClick(item.itemId, song)
                     true
                 }
                 R.id.song_list_popup_artist -> {
-                    onSongsItemClickListener.onItemClick(item.itemId, song)
+                    onSongsItemClickListener.onSongItemClick(item.itemId, song)
                     true
                 }
                 R.id.song_list_popup_album -> {
-                    onSongsItemClickListener.onItemClick(item.itemId, song)
+                    onSongsItemClickListener.onSongItemClick(item.itemId, song)
                     true
                 }
                 else -> false
             }
         }
-
-
 
         Glide.with(view)
             .load(song.imageUri)

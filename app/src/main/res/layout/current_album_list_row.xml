@@ -14,13 +14,15 @@
         android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="69dp"
             android:orientation="horizontal"
             android:paddingRight="20dp"
+            android:layout_marginBottom="-1dp"
             android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,26 +30,29 @@
 
             <TextView
                 android:id="@+id/tv_current_album_list_index"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="28dp"
                 android:fontFamily="@font/noto_sans"
                 android:includeFontPadding="false"
-                android:text="10"
-                android:textAlignment="center"
+                android:text="999"
+                android:gravity="center"
                 android:textColor="@color/list_font_large"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:layout_marginRight="10dp"/>
 
             <TextView
                 android:id="@+id/tv_current_album_list_title"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_width="290dp"
+                android:layout_height="28dp"
                 android:fontFamily="@font/noto_sans"
                 android:includeFontPadding="false"
                 android:text="TextView"
+                android:gravity="center_vertical"
                 android:textColor="@color/list_font_large"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
         </LinearLayout>
 
         <LinearLayout
@@ -57,7 +62,7 @@
             android:paddingRight="40dp">
 
             <View
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:layout_editor_absoluteX="20dp" />
@@ -73,5 +78,17 @@
         </LinearLayout>
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/ib_current_album_songs_button"
+        style="?android:attr/actionOverflowButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:tint="@color/list_font_large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="25dp"
+        android:paddingBottom="4dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

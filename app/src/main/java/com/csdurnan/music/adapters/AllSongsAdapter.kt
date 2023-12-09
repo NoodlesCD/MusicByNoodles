@@ -56,15 +56,15 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
             popupMenu.setOnMenuItemClickListener {item ->
                 when (item.itemId) {
                     R.id.song_list_popup_add_queue -> {
-                        onSongsItemClickListener?.onItemClick(item.itemId, song)
+                        onSongsItemClickListener?.onSongItemClick(item.itemId, song)
                         true
                     }
                     R.id.song_list_popup_artist -> {
-                        onSongsItemClickListener?.onItemClick(item.itemId, song)
+                        onSongsItemClickListener?.onSongItemClick(item.itemId, song)
                         true
                     }
                     R.id.song_list_popup_album -> {
-                        onSongsItemClickListener?.onItemClick(item.itemId, song)
+                        onSongsItemClickListener?.onSongItemClick(item.itemId, song)
                         true
                     }
                     else -> false
@@ -112,15 +112,15 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
         holder.popupMenu.setOnMenuItemClickListener {item ->
             when (item.itemId) {
                 R.id.song_list_popup_add_queue -> {
-                    onSongsItemClickListener.onItemClick(item.itemId, songList[position])
+                    onSongsItemClickListener.onSongItemClick(item.itemId, songList[position])
                     true
                 }
                 R.id.song_list_popup_artist -> {
-                    onSongsItemClickListener.onItemClick(item.itemId, songList[position])
+                    onSongsItemClickListener.onSongItemClick(item.itemId, songList[position])
                     true
                 }
                 R.id.song_list_popup_album -> {
-                    onSongsItemClickListener.onItemClick(item.itemId, songList[position])
+                    onSongsItemClickListener.onSongItemClick(item.itemId, songList[position])
                     true
                 }
                 else -> false
@@ -134,6 +134,6 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
     }
 
     interface OnSongsItemClickListener {
-        fun onItemClick(position: Int, song: Song)
+        fun onSongItemClick(position: Int, song: Song)
     }
 }

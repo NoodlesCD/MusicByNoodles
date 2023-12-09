@@ -1,5 +1,6 @@
 package com.csdurnan.music.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Artist
-import com.csdurnan.music.ui.albums.AllAlbumsDirections
 import com.csdurnan.music.ui.artists.AllArtistsDirections
 
 class AllArtistsAdapter(private val artistList: ArrayList<Artist>, private val fragment: Fragment) : RecyclerView.Adapter<AllArtistsAdapter.ViewHolder>() {
@@ -55,9 +55,14 @@ class AllArtistsAdapter(private val artistList: ArrayList<Artist>, private val f
      * RecyclerView calls this method to associate a ViewHolder with data.
      * This method fetches appropriate data and uses it to fill in the layout.
      */
+    @SuppressLint("StringFormatMatches")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.artistName.text = artistList[position].artistTitle
-        holder.artistDetails.text = "${artistList[position].albums.size} albums - ${artistList[position].songCount} songs"
+        holder.artistDetails.text = fragment.context?.getString(
+            R.string.albums_songs,
+            artistList[position].albums.size,
+            artistList[position].songCount
+        )
 
         holder.row.setOnClickListener {
             val action = AllArtistsDirections.actionArtistsToCurrentArtist(artistList[position])
@@ -68,6 +73,5 @@ class AllArtistsAdapter(private val artistList: ArrayList<Artist>, private val f
             .load(artistList[position].albums[0].albumUri)
             .placeholder(R.drawable.image)
             .into(holder.artistArtwork)
-
     }
 }

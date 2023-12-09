@@ -1,6 +1,7 @@
 package com.csdurnan.music.fragments
 
 import android.content.ContentResolver
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -15,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.R
 import com.csdurnan.music.adapters.CurrentAlbumAdapter
@@ -25,6 +25,8 @@ import com.csdurnan.music.adapters.CurrentAlbumAdapter
  * Created when a user views an Album.
  */
 class CurrentAlbum : Fragment() {
+
+    private lateinit var onAlbumItemClickListener: CurrentAlbumAdapter.OnAlbumItemClickListener
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
@@ -38,7 +40,6 @@ class CurrentAlbum : Fragment() {
 
         view.findViewById<TextView>(R.id.tv_current_album_title).text = args.selectedAlbum.albumTitle
         view.findViewById<TextView>(R.id.tv_current_album_artist).text = args.selectedAlbum.artist
-
 
         val trackUri = args.selectedAlbum.songs[0].uri
         val cr = context?.contentResolver
@@ -55,9 +56,13 @@ class CurrentAlbum : Fragment() {
         val currentAlbumRecyclerView = view.findViewById<RecyclerView>(R.id.rv_current_album_recycler)
         currentAlbumRecyclerView.layoutManager = LinearLayoutManager(view.context)
         currentAlbumRecyclerView.setHasFixedSize(true)
-        currentAlbumRecyclerView.adapter = parentFragment?.context?.let { CurrentAlbumAdapter(args.selectedAlbum, this) }
-
+        currentAlbumRecyclerView.adapter = parentFragment?.context?.let { CurrentAlbumAdapter(args.selectedAlbum, onAlbumItemClickListener, this) }
 
         return view
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        onAlbumItemClickListener = context as CurrentAlbumAdapter.OnAlbumItemClickListener
     }
 }

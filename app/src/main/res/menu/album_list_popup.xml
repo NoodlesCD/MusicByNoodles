@@ -4,6 +4,4 @@
         android:title="@string/add_to_queue"/>
     <item android:id="@+id/song_list_popup_artist"
         android:title="@string/view_artist"/>
-    <item android:id="@+id/song_list_popup_album"
-        android:title="@string/view_album"/>
 </menu>

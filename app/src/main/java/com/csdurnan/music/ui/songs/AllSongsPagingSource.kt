@@ -6,17 +6,17 @@ import com.csdurnan.music.dc.Song
 
 class AllSongsPagingSource(private val songsList: List<Song>) : PagingSource<Int, Song>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Song> {
-        try {
+        return try {
             val currentPage = params.key ?: 0
             val dataChunk = songsList.subList(currentPage * params.loadSize, (currentPage + 1) * params.loadSize)
 
-            return LoadResult.Page(
+            LoadResult.Page(
                 data = dataChunk,
                 prevKey = if (currentPage == 0) null else currentPage -1,
                 nextKey = if ((currentPage + 1) * params.loadSize >= songsList.size) null else currentPage + 1
             )
         } catch (e: Exception) {
-            return LoadResult.Error(e)
+            LoadResult.Error(e)
         }
     }
 
@@ -26,5 +26,4 @@ class AllSongsPagingSource(private val songsList: List<Song>) : PagingSource<Int
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
-
 }

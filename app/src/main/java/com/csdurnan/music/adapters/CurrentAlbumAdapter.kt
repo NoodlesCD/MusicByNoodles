@@ -3,29 +3,36 @@ package com.csdurnan.music.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
 import com.csdurnan.music.dc.Song
 import com.csdurnan.music.fragments.CurrentAlbumDirections
 
-class CurrentAlbumAdapter(private val currentAlbum: Album, private val fragment: Fragment) : RecyclerView.Adapter<CurrentAlbumAdapter.ViewHolder>() {
+class CurrentAlbumAdapter(private val currentAlbum: Album, private val onAlbumItemClickListener: OnAlbumItemClickListener, private val fragment: Fragment) : RecyclerView.Adapter<CurrentAlbumAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val index: TextView
         val songName: TextView
         val row: ConstraintLayout
+        val popupMenuButton: ImageButton
+        val popupMenu: PopupMenu
 
         init {
             index = view.findViewById(R.id.tv_current_album_list_index)
             songName = view.findViewById(R.id.tv_current_album_list_title)
             row = view.findViewById(R.id.cl_current_album_song_row)
+
+            popupMenuButton = view.findViewById(R.id.ib_current_album_songs_button)
+            popupMenu = PopupMenu(view.context, popupMenuButton)
+            popupMenu.inflate(R.menu.album_list_popup)
+            popupMenuButton.setOnClickListener { popupMenu.show() }
         }
     }
 
@@ -46,5 +53,26 @@ class CurrentAlbumAdapter(private val currentAlbum: Album, private val fragment:
                 CurrentAlbumDirections.actionGlobalCurrentSong(currentAlbum.songs[position].id)
             it.findNavController().navigate(action)
         }
+        holder.popupMenu.setOnMenuItemClickListener {item ->
+            when (item.itemId) {
+                R.id.song_list_popup_add_queue -> {
+                    onAlbumItemClickListener.onAlbumItemClick(item.itemId, currentAlbum.songs[position])
+                    true
+                }
+                R.id.song_list_popup_artist -> {
+                    onAlbumItemClickListener.onAlbumItemClick(item.itemId, currentAlbum.songs[position])
+                    true
+                }
+                R.id.song_list_popup_album -> {
+                    onAlbumItemClickListener.onAlbumItemClick(item.itemId, currentAlbum.songs[position])
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    interface OnAlbumItemClickListener {
+        fun onAlbumItemClick(position: Int, song: Song)
     }
 }

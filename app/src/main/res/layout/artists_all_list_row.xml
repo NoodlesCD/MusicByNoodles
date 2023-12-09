@@ -30,13 +30,15 @@
 
         <TextView
             android:id="@+id/tv_artist_name"
-            android:layout_width="wrap_content"
+            android:layout_width="290dp"
             android:layout_height="20dp"
             android:fontFamily="@font/noto_sans"
             android:includeFontPadding="false"
             android:text="TextView"
             android:textColor="@color/list_font_large"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/tv_artist_details"

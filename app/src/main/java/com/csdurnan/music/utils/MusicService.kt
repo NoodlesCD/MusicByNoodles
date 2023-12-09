@@ -1,5 +1,7 @@
 package com.csdurnan.music.utils
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.content.ContentUris
 import android.content.Context
@@ -13,6 +15,7 @@ import android.os.PowerManager
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.media.app.NotificationCompat
 import com.csdurnan.music.dc.Song
 import java.util.LinkedList
 import java.util.Queue
@@ -83,9 +86,7 @@ class MusicService :
 
     private val musicBinder: IBinder = MusicBinder(this)
 
-    override fun onBind(p0: Intent?): IBinder {
-        return musicBinder
-    }
+    override fun onBind(p0: Intent?): IBinder = musicBinder
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onUnbind(intent: Intent?): Boolean {
@@ -193,29 +194,18 @@ class MusicService :
         sendBroadcast(Intent("UPDATE_UI"))
     }
 
-    fun seekTo(progress: Int) {
-        mediaPlayer.seekTo(progress)
-    }
+    fun seekTo(progress: Int) = mediaPlayer.seekTo(progress)
 
-    fun songInfo(): Song? {
-        return songsMap[songPosition]
-    }
+    fun songInfo(): Song? = songsMap[songPosition]
 
-    fun isPlaying(): Boolean {
-        return mediaPlayer.isPlaying
-    }
+    fun isPlaying(): Boolean = mediaPlayer.isPlaying
 
-    fun isPaused(): Boolean {
-        return isPaused
-    }
+    fun isPaused(): Boolean = isPaused
 
-    fun currentPosition(): Int {
-        return mediaPlayer.currentPosition
-    }
+    fun currentPosition(): Int = mediaPlayer.currentPosition
 
-    fun addToQueue(songIndex: Long) {
-        songQueue.add(songIndex)
-    }
+    fun addToQueue(songIndex: Long) = songQueue.add(songIndex)
+
 
     override fun onError(p0: MediaPlayer?, p1: Int, p2: Int): Boolean {
         return false
@@ -227,6 +217,21 @@ class MusicService :
         } else {
             mediaPlayer.stop()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun notificationBuilder() {
+        val CHANNEL_ID = "MUSICBYNOODLES"
+        val name = "MusicByNoodles"
+        val descriptionText = "Music player"
+        val importance = NotificationManager.IMPORTANCE_MIN
+        val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
+        mChannel.description = descriptionText
+
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(mChannel)
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
     }
 
 }

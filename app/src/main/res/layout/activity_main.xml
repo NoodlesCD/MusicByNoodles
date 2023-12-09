@@ -44,7 +44,7 @@
             android:visibility="visible"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:elevation="5dp"
+            android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -132,7 +132,7 @@
         android:background="@drawable/navigation_background"/>
 
     <View
-        android:id="@+id/view3"
+        android:id="@+id/v_top_shadow"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@drawable/navigation_background"
@@ -146,7 +146,7 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view3"
+        app:layout_constraintTop_toTopOf="@+id/v_top_shadow"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/noto_sans"
         android:text="Songs"

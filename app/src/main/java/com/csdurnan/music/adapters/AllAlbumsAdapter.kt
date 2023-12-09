@@ -13,8 +13,6 @@ import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
 import com.csdurnan.music.ui.albums.AllAlbumsDirections
-import com.csdurnan.music.ui.artists.AllArtistsDirections
-import com.csdurnan.music.ui.songs.AllSongsDirections
 
 class AllAlbumsAdapter(private val albumsList: ArrayList<Album>, private val fragment: Fragment) : RecyclerView.Adapter<AllAlbumsAdapter.ViewHolder>() {
     /**

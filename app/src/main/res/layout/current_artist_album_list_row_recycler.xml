@@ -73,5 +73,18 @@
         </LinearLayout>
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/ib_artists_list_button"
+        style="?android:attr/actionOverflowButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:tint="@color/list_font_large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="30dp"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
