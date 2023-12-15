@@ -7,4 +7,5 @@
     <string name="view_artist">View artist</string>
     <string name="add_to_queue">Add to queue</string>
     <string name="albums_songs">%1$s albums · %2$s songs</string>
+    <string name="artist_adapter_songs">%1$s songs</string>
 </resources>

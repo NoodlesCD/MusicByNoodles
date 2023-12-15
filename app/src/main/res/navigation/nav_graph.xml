@@ -112,5 +112,8 @@
         <argument
             android:name="selectedArtist"
             app:argType="com.csdurnan.music.dc.Artist" />
+        <action
+            android:id="@+id/action_currentArtist_to_currentAlbum"
+            app:destination="@id/currentAlbum" />
     </fragment>
 </navigation>

@@ -15,7 +15,6 @@ import android.os.PowerManager
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.media.app.NotificationCompat
 import com.csdurnan.music.dc.Song
 import java.util.LinkedList
 import java.util.Queue
@@ -231,7 +230,7 @@ class MusicService :
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(mChannel)
 
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        //val builder = NotificationCompat.Builder(this, CHANNEL_ID)
     }
 
 }
