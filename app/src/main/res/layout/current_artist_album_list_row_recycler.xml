@@ -77,7 +77,7 @@
         android:id="@+id/ib_artists_list_button"
         style="?android:attr/actionOverflowButtonStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:text="Button"
         app:tint="@color/list_font_large"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -7,14 +7,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
-import android.util.Size
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -28,6 +26,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.MainNavDirections
 import com.csdurnan.music.R
@@ -41,6 +41,7 @@ import com.csdurnan.music.utils.MusicBinder
 import com.csdurnan.music.utils.MusicService
 import com.csdurnan.music.utils.UpdateUiBroadcastReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import jp.wasabeef.glide.transformations.BlurTransformation
 
 class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, AllSongsAdapter.OnSongsItemClickListener, CurrentAlbumAdapter.OnAlbumItemClickListener {
 
@@ -133,7 +134,6 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        val headerText = findViewById<TextView>(R.id.tv_header)
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigation.setupWithNavController(navController)
 
@@ -141,17 +141,14 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
             when (item.itemId) {
                 R.id.artists -> {
                     navController.navigate(R.id.artists)
-                    headerText.text = getString(R.string.artists)
                     true
                 }
                 R.id.albums -> {
                     navController.navigate(R.id.albums)
-                    headerText.text = getString(R.string.albums)
                     true
                 }
                 R.id.songs -> {
                     navController.navigate(R.id.songs)
-                    headerText.text = getString(R.string.songs)
                     true
                 }
                 else -> false
@@ -163,17 +160,11 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.currentSong) {
                 songBarVisibility(View.GONE)
+                findViewById<ImageView>(R.id.current_song).visibility = View.VISIBLE
             } else {
                 songBarVisibility(View.VISIBLE)
+                findViewById<ImageView>(R.id.current_song).visibility = View.GONE
                 Handler(Looper.getMainLooper()).post(currentPositionTimer)
-            }
-            if (destination.id != R.id.artists
-                && destination.id != R.id.albums
-                && destination.id != R.id.songs) {
-                headerText.text = ""
-                findViewById<View>(R.id.v_top_shadow).visibility = View.GONE
-            } else {
-                findViewById<View>(R.id.v_top_shadow).visibility = View.VISIBLE
             }
         }
 
@@ -221,24 +212,36 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
     fun updateCurrentSongBarUi() {
         val currentSong = musicService!!.songInfo()
 
+        val background = findViewById<ImageView>(R.id.current_song)
+        if (background != null) {
+            Glide.with(this)
+                .load(musicService?.songInfo()?.imageUri)
+                .placeholder(R.drawable.image)
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(25,3)))
+                .into(background)
+        }
+
+        val currentSongBackground = findViewById<ImageView>(R.id.current_song_bar_bg)
+        if (background != null) {
+            Glide.with(this)
+                .load(musicService?.songInfo()?.imageUri)
+                .placeholder(R.drawable.image)
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(25,3)))
+                .into(background)
+        }
+
         val currentSongTitle = findViewById<TextView>(R.id.tv_current_song_title)
         currentSongTitle.text = currentSong?.title
         val currentSongArtist = findViewById<TextView>(R.id.tv_current_song_artist)
         currentSongArtist.text = currentSong?.artist
 
         val currentSongImg = findViewById<ImageView>(R.id.iv_current_song_image)
-        if (currentSong != null) {
-            val trackUri = currentSong.uri
-            val cr = contentResolver
 
-            var bm: Bitmap? = null
-            if (cr != null) {
-                bm = trackUri.let { cr.loadThumbnail(it, Size(1024, 1024), null) }
-            }
-
-            currentSongImg.setImageBitmap(bm)
-            currentSongImg.scaleType =
-                ImageView.ScaleType.FIT_CENTER
+        if (currentSongImg != null) {
+            Glide.with(this)
+                .load(currentSong?.imageUri)
+                .placeholder(R.drawable.image)
+                .into(currentSongImg)
         }
     }
 

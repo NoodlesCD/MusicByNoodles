@@ -15,4 +15,28 @@
         android:paddingBottom="120dp"
         android:paddingTop="90dp"
         android:clipToPadding="false"/>
+
+    <View
+        android:id="@+id/v_top_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/current_background"
+        android:rotation="180"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/v_top_shadow"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/noto_sans"
+        android:text="@string/songs"
+        android:shadowColor="@color/black"
+        android:shadowRadius="15"
+        android:textColor="@color/list_font_large"
+        android:textSize="25sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

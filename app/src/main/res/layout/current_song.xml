@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="current_song_fragment"
-    android:id="@+id/current_song"
     android:paddingBottom="50dp">
 
     <ImageView

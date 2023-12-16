@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_current_album_song_row"
     android:layout_width="match_parent"
-    android:layout_height="70dp">
+    android:layout_height="55dp">
 
     <LinearLayout
         android:id="@+id/ll_current_album_song_row"
@@ -19,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="69dp"
+            android:layout_height="55dp"
             android:orientation="horizontal"
             android:paddingRight="20dp"
             android:layout_marginBottom="-1dp"
@@ -37,7 +37,7 @@
                 android:text="999"
                 android:gravity="center"
                 android:textColor="@color/list_font_large"
-                android:textSize="15sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginRight="10dp"/>
 
@@ -50,7 +50,7 @@
                 android:text="TextView"
                 android:gravity="center_vertical"
                 android:textColor="@color/list_font_large"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:ellipsize="end"
                 android:maxLines="1"/>
         </LinearLayout>
@@ -82,13 +82,13 @@
         android:id="@+id/ib_current_album_songs_button"
         style="?android:attr/actionOverflowButtonStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:text="Button"
         app:tint="@color/list_font_large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginRight="25dp"
-        android:paddingBottom="4dp"/>
+        android:paddingBottom="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

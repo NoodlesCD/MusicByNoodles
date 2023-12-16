@@ -5,12 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.utils.MusicBinder
 import com.csdurnan.music.utils.MusicService
@@ -206,17 +205,22 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
         view?.findViewById<SeekBar>(R.id.sbSongPositionBar)?.max = currentSong?.duration!!
         view?.findViewById<TextView>(R.id.tvSongTotalTime)?.text = timeLabel(currentSong.duration)
 
-        val trackUri = currentSong.uri
-        val cr = context?.contentResolver
+//        val trackUri = currentSong.uri
+//        val cr = context?.contentResolver
 
-        var bm: Bitmap? = null
-        if (cr != null) {
-            bm = trackUri.let { cr.loadThumbnail(it, Size(2048, 2048), null) }
+//        var bm: Bitmap? = null
+//        if (cr != null) {
+//            bm = trackUri.let { cr.loadThumbnail(it, Size(2048, 2048), null) }
+//        }
+
+        val image = view?.findViewById<ImageView>(R.id.ivSongImageView)
+
+        if (image != null) {
+            Glide.with(this)
+                .load(currentSong.imageUri)
+                .placeholder(R.drawable.image)
+                .into(image)
         }
-
-        view?.findViewById<ImageView>(R.id.ivSongImageView)?.setImageBitmap(bm)
-        view?.findViewById<ImageView>(R.id.ivSongImageView)?.scaleType =
-            ImageView.ScaleType.FIT_CENTER
     }
 
     /** Generates a time label of mm:ss */

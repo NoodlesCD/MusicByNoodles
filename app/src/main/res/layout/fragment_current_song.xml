@@ -5,8 +5,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.currentSong.CurrentSong"
-    android:paddingBottom="80dp"
-    android:background="@color/background">
+    android:paddingBottom="80dp">
+
+    <View
+        android:id="@+id/v_top_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/current_song_page_background"
+        android:rotation="180"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivSongImageView"
@@ -18,7 +25,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="135dp"
-        app:shapeAppearanceOverlay="@style/roundedImageView"/>
+        app:shapeAppearanceOverlay="@style/roundedImageView"
+        android:elevation="5dp"/>
 
     <SeekBar
         android:id="@+id/sbSongPositionBar"
@@ -128,7 +136,8 @@
             android:text="A View to a Kill"
             android:textColor="@color/list_font_large"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:elevation="5dp"/>
 
         <TextView
             android:id="@+id/tvArtistTitle"
@@ -136,7 +145,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
             android:text="Dan Carlin"
-            android:textColor="@color/list_font_small" />
+            android:textColor="@color/list_font_small"
+            android:elevation="5dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
