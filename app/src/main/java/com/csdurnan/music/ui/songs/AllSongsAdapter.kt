@@ -1,4 +1,4 @@
-package com.csdurnan.music.adapters
+package com.csdurnan.music.ui.songs
 
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.ui.songs.AllSongsDirections
 
 class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fragment, private val onSongsItemClickListener: OnSongsItemClickListener) : RecyclerView.Adapter<AllSongsAdapter.AllSongsViewHolder>() {
     /**

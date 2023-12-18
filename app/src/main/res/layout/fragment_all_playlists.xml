@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.playlists.AllPlaylists"
+    android:tag="all_playlists_fragment"
+    android:id="@+id/frag_all_playlists">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_all_playlists_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="120dp"
+        android:paddingTop="90dp"
+        android:clipToPadding="false"/>
+
+    <View
+        android:id="@+id/v_top_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/current_background"
+        android:rotation="180"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/v_top_shadow"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/noto_sans"
+        android:text="@string/playlists"
+        android:shadowColor="@color/black"
+        android:shadowRadius="15"
+        android:textColor="@color/list_font_large"
+        android:textSize="25sp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
-import com.csdurnan.music.adapters.AllSongsAdapter
 import com.csdurnan.music.dc.Song
 
 class AllSongsViewHolder(val view: View, private val onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) : RecyclerView.ViewHolder(view) {

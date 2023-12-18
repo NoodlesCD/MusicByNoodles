@@ -1,4 +1,4 @@
-package com.csdurnan.music.fragments
+package com.csdurnan.music.ui.albums.currentAlbum
 
 import android.content.ContentResolver
 import android.content.Context
@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.R
-import com.csdurnan.music.adapters.CurrentAlbumAdapter
+import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumArgs
 
 /**
  * A simple [Fragment] subclass.

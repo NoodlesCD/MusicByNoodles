@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import com.csdurnan.music.R
-import com.csdurnan.music.adapters.AllSongsAdapter
 import com.csdurnan.music.dc.Song
 
 class AllSongsPagingAdapter(var onSongsItemClickListener: AllSongsAdapter.OnSongsItemClickListener) :

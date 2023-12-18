@@ -1,4 +1,4 @@
-package com.csdurnan.music.adapters
+package com.csdurnan.music.ui.albums
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
-import com.csdurnan.music.ui.albums.AllAlbumsDirections
 
-class AllAlbumsAdapter(private val albumsList: ArrayList<Album>, private val fragment: Fragment) : RecyclerView.Adapter<AllAlbumsAdapter.ViewHolder>() {
+class AllAlbumsAdapter(
+    private val albumsList: ArrayList<Album>,
+    private val fragment: Fragment
+) : RecyclerView.Adapter<AllAlbumsAdapter.ViewHolder>() {
     /**
      * Provides a reference to the type of views that we will be using.
      */
@@ -38,7 +40,9 @@ class AllAlbumsAdapter(private val albumsList: ArrayList<Album>, private val fra
      * It does not fill in the view's contents with any specific data.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.all_albums_row, parent, false)
+        val itemView = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.all_albums_row, parent, false)
         return ViewHolder(itemView)
     }
 

@@ -31,11 +31,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.MainNavDirections
 import com.csdurnan.music.R
-import com.csdurnan.music.adapters.AllSongsAdapter
-import com.csdurnan.music.adapters.CurrentAlbumAdapter
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.ui.currentSong.SongSelectorViewModel
+import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumAdapter
+import com.csdurnan.music.ui.songs.AllSongsAdapter
 import com.csdurnan.music.ui.songs.AllSongsDirections
+import com.csdurnan.music.ui.songs.currentSong.SongSelectorViewModel
 import com.csdurnan.music.utils.MainActivityCurrentSongBarCallback
 import com.csdurnan.music.utils.MusicBinder
 import com.csdurnan.music.utils.MusicService
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
             // Perform the operation that requires this permission
             if (playIntent == null) {
                 playIntent = Intent(this, MusicService::class.java)
-                bindService(playIntent, musicConnection, BIND_AUTO_CREATE)
+                bindService(playIntent!!, musicConnection, BIND_AUTO_CREATE)
                 startService(playIntent)
             }
             Log.i("MainActivity.kt", "Android permissions granted.")

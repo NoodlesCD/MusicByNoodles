@@ -1,4 +1,4 @@
-package com.csdurnan.music.adapters
+package com.csdurnan.music.ui.albums.currentAlbum
 
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.fragments.CurrentAlbumDirections
+import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumDirections
 
 class CurrentAlbumAdapter(private val currentAlbum: Album, private val onAlbumItemClickListener: OnAlbumItemClickListener, private val fragment: Fragment) : RecyclerView.Adapter<CurrentAlbumAdapter.ViewHolder>() {
 

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.fragments.CurrentArtistDirections
+import com.csdurnan.music.ui.artists.currentArtist.CurrentArtistDirections
 
 class CurrentArtistSongsAdapter(private val songs: MutableList<Song>, private val fragment: Fragment) : RecyclerView.Adapter<CurrentArtistSongsAdapter.ViewHolder>() {
 

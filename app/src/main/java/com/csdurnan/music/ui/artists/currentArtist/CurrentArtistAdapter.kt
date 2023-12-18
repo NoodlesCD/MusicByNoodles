@@ -1,4 +1,4 @@
-package com.csdurnan.music.adapters
+package com.csdurnan.music.ui.artists.currentArtist
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
-import com.csdurnan.music.fragments.CurrentArtistDirections
+import com.csdurnan.music.ui.artists.currentArtist.CurrentArtistDirections
 
 class CurrentArtistAdapter(private val albumList: MutableList<Album>, private val fragment: Fragment) : RecyclerView.Adapter<CurrentArtistAdapter.ViewHolder>() {
 

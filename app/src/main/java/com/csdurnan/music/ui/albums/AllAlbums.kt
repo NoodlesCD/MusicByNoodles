@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.R
-import com.csdurnan.music.adapters.AllAlbumsAdapter
 
 /**
  * A simple [Fragment] subclass.

@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_marginBottom="5dp"
 
         app:layout_constraintBottom_toTopOf="@+id/navigation"
@@ -55,7 +55,7 @@
             android:paddingRight="7dp"
             android:paddingTop="7dp"
             android:paddingBottom="0dp"
-            android:elevation="10dp"
+            android:elevation="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

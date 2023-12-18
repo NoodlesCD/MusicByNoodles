@@ -3,7 +3,7 @@ package com.csdurnan.music.utils
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.csdurnan.music.ui.currentSong.CurrentSongChangeCallback
+import com.csdurnan.music.ui.songs.currentSong.CurrentSongChangeCallback
 
 class UpdateUiBroadcastReceiver(
     private val currentSongCallback: CurrentSongChangeCallback?,

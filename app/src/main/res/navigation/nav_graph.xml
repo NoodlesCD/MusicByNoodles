@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/currentSong"
-        android:name="com.csdurnan.music.ui.currentSong.CurrentSong"
+        android:name="com.csdurnan.music.ui.songs.currentSong.CurrentSong"
         android:label="fragment_current_song"
         tools:layout="@layout/fragment_current_song" >
         <argument
@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/currentAlbum"
-        android:name="com.csdurnan.music.fragments.CurrentAlbum"
+        android:name="com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbum"
         android:label="fragment_current_album"
         tools:layout="@layout/fragment_current_album" >
         <action
@@ -103,7 +103,7 @@
     </fragment>
     <fragment
         android:id="@+id/currentArtist"
-        android:name="com.csdurnan.music.fragments.CurrentArtist"
+        android:name="com.csdurnan.music.ui.artists.currentArtist.CurrentArtist"
         android:label="fragment_current_artist"
         tools:layout="@layout/fragment_current_artist" >
         <action

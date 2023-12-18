@@ -1,4 +1,4 @@
-package com.csdurnan.music.ui.currentSong
+package com.csdurnan.music.ui.songs.currentSong
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

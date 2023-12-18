@@ -1,4 +1,4 @@
-package com.csdurnan.music.fragments
+package com.csdurnan.music.ui.artists.currentArtist
 
 import android.content.ContentResolver
 import android.os.Build
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.R
-import com.csdurnan.music.adapters.CurrentArtistAdapter
+import com.csdurnan.music.ui.artists.currentArtist.CurrentArtistArgs
 
 /**
  * A simple [Fragment] subclass.
