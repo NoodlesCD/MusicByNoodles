@@ -1,4 +1,4 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.utils.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

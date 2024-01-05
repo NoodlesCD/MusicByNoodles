@@ -2,56 +2,60 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_all_albums_row"
+    android:id="@+id/cl_all_songs_list_row"
     android:layout_width="match_parent"
     android:layout_height="65dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_all_albums_row_image"
+        android:id="@+id/iv_all_songs_row_image"
         android:layout_width="45dp"
         android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/image"
+        app:srcCompat="@drawable/artwork_placeholder"
         app:shapeAppearanceOverlay="@style/roundedImageView"/>
 
     <LinearLayout
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
         android:orientation="vertical"
         android:paddingLeft="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_all_albums_row_image"
+        app:layout_constraintStart_toEndOf="@+id/iv_all_songs_row_image"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/tv_all_albums_row_title"
+            android:id="@+id/tv_songs_all_list_title"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:fontFamily="@font/noto_sans"
+            android:includeFontPadding="false"
             android:text="TextView"
             android:textColor="@color/list_font_large"
             android:textSize="16sp"
             android:ellipsize="end"
-            android:maxLines="1"/>
+            android:maxLines="1" />
 
         <TextView
-            android:id="@+id/tv_all_albums_row_artist"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_songs_all_list_artist"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans"
             android:text="TextView"
             android:textColor="@color/list_font_small"
             android:textSize="13sp"
             android:ellipsize="end"
-            android:maxLines="1"
-            />
+            android:maxLines="1"/>
+
     </LinearLayout>
 
+
     <ImageButton
-        android:id="@+id/ib_albums_all_list_button"
+        android:id="@+id/ib_songs_all_list_button"
         style="?android:attr/actionOverflowButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,5 +70,8 @@
         android:layout_height="1dp"
         android:background="@color/separator"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="20dp"/>
+        tools:layout_editor_absoluteX="20dp" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".utils.MusicService"
+        <service android:name=".utils.musicService.MusicService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -31,7 +31,7 @@
             </intent-filter>
         </service>
         <receiver
-            android:name=".utils.UpdateUiBroadcastReceiver"
+            android:name=".utils.musicService.UpdateUiBroadcastReceiver"
             android:enabled="true"
             android:exported="false"
             tools:ignore="Instantiatable">

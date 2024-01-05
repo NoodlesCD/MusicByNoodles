@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.PlaylistSongCrossRef
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.utils.PlaylistDatabase
+import com.csdurnan.music.utils.database.PlaylistDatabase
 
 /**
  * A simple [Fragment] subclass.
@@ -48,7 +48,7 @@ class CurrentPlaylist : Fragment(), CurrentPlaylistAdapter.DeletePlaylistSong {
         val image = view.findViewById<ImageView>(R.id.iv_current_playlist_image)
         Glide.with(this)
             .load(args.playlist.albumUri)
-            .placeholder(R.drawable.image)
+            .placeholder(R.drawable.artwork_placeholder)
             .into(image)
 
         db.getSongsFromPlaylist(args.id).observe(viewLifecycleOwner) { playlistData ->

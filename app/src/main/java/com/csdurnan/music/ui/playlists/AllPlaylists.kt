@@ -5,17 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Playlist
-import com.csdurnan.music.utils.PlaylistDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.csdurnan.music.utils.database.PlaylistDatabase
 
 /**
  * A simple [Fragment] subclass.

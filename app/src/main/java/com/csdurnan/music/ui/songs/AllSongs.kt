@@ -8,16 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.csdurnan.music.ContentManagement
+import com.csdurnan.music.utils.ContentManagement
 import com.csdurnan.music.R
-import com.reddit.indicatorfastscroll.FastScrollItemIndicator
-import com.reddit.indicatorfastscroll.FastScrollerView
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.

@@ -1,4 +1,4 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.utils.musicService
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

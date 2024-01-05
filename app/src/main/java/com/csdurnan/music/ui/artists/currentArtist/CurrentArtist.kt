@@ -14,7 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.csdurnan.music.ContentManagement
+import com.csdurnan.music.utils.ContentManagement
 import com.csdurnan.music.R
 
 /**
@@ -46,7 +46,7 @@ class CurrentArtist : Fragment() {
 
         Glide.with(this)
             .load(args.selectedArtist.albums[0].albumUri)
-            .placeholder(R.drawable.image)
+            .placeholder(R.drawable.artwork_placeholder)
             .into(image)
 
         var currentArtistAlbumRecycler = view.findViewById<RecyclerView>(R.id.rv_current_artist_recycler)

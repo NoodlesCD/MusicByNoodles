@@ -41,7 +41,7 @@ class AllSongsAdapter(
             row = view.findViewById(R.id.cl_all_songs_list_row)
             popupMenuButton = view.findViewById(R.id.ib_songs_all_list_button)
             popupMenu = PopupMenu(view.context, popupMenuButton)
-            popupMenu.inflate(R.menu.song_list_popup)
+            popupMenu.inflate(R.menu.popup_song_list)
 
             popupMenuButton.setOnClickListener {
                 popupMenu.gravity = Gravity.END
@@ -56,7 +56,7 @@ class AllSongsAdapter(
      * It does not fill in the view's contents with any specific data.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllSongsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.songs_all_list_row, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_all_songs, parent, false)
         return AllSongsViewHolder(view, onSongsItemClickListener)
     }
 
@@ -105,7 +105,7 @@ class AllSongsAdapter(
 
         Glide.with(fragment)
             .load(songList[position].imageUri)
-            .placeholder(R.drawable.image)
+            .placeholder(R.drawable.artwork_placeholder)
             .into(holder.image)
     }
 

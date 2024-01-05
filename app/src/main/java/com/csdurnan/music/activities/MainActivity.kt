@@ -25,33 +25,27 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.navigation.NavHost
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.csdurnan.music.ContentManagement
+import com.csdurnan.music.utils.ContentManagement
 import com.csdurnan.music.MainNavDirections
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.ui.albums.AllAlbums
 import com.csdurnan.music.ui.albums.AllAlbumsAdapter
 import com.csdurnan.music.ui.albums.AllAlbumsDirections
 import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumAdapter
-import com.csdurnan.music.ui.playlists.AllPlaylists
-import com.csdurnan.music.ui.playlists.AllPlaylistsAdapter
-import com.csdurnan.music.ui.playlists.currentPlaylist.CurrentPlaylistAdapter
 import com.csdurnan.music.ui.songs.AllSongsAdapter
 import com.csdurnan.music.ui.songs.AllSongsDirections
 import com.csdurnan.music.ui.songs.currentSong.SongSelectorViewModel
-import com.csdurnan.music.utils.MainActivityCurrentSongBarCallback
-import com.csdurnan.music.utils.MusicBinder
-import com.csdurnan.music.utils.MusicService
-import com.csdurnan.music.utils.UpdateUiBroadcastReceiver
+import com.csdurnan.music.utils.musicService.MainActivityCurrentSongBarCallback
+import com.csdurnan.music.utils.musicService.MusicBinder
+import com.csdurnan.music.utils.musicService.MusicService
+import com.csdurnan.music.utils.musicService.UpdateUiBroadcastReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eightbitlab.com.blurview.BlurView
-import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
 import jp.wasabeef.glide.transformations.BlurTransformation
 
@@ -207,7 +201,7 @@ class MainActivity :
                 playPauseButton?.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
-                        R.drawable.baseline_play_arrow_24,
+                        R.drawable.controls_play,
                         null
                     )
                 )
@@ -216,7 +210,7 @@ class MainActivity :
                 playPauseButton.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
-                        R.drawable.baseline_pause_24,
+                        R.drawable.controls_pause,
                         null
                     )
                 )
@@ -248,7 +242,7 @@ class MainActivity :
         if (background != null) {
             Glide.with(this)
                 .load(musicService?.songInfo()?.imageUri)
-                .placeholder(R.drawable.image)
+                .placeholder(R.drawable.artwork_placeholder)
                 .apply(RequestOptions.bitmapTransform(BlurTransformation(25,3)))
                 .into(background)
         }
@@ -257,7 +251,7 @@ class MainActivity :
 //        if (background != null) {
 //            Glide.with(this)
 //                .load(musicService?.songInfo()?.imageUri)
-//                .placeholder(R.drawable.image)
+//                .placeholder(R.drawable.artwork_placeholder)
 //                .apply(RequestOptions.bitmapTransform(BlurTransformation(25,3)))
 //                .into(background)
 //        }
@@ -272,7 +266,7 @@ class MainActivity :
         if (currentSongImg != null) {
             Glide.with(this)
                 .load(currentSong?.imageUri)
-                .placeholder(R.drawable.image)
+                .placeholder(R.drawable.artwork_placeholder)
                 .into(currentSongImg)
         }
     }

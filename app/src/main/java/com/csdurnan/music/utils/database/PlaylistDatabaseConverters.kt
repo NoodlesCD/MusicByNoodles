@@ -1,4 +1,4 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.utils.database
 
 import android.net.Uri
 import androidx.core.net.toUri

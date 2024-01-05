@@ -38,7 +38,7 @@ class AllArtistsAdapter(private val artistList: List<Artist>, private val fragme
      * It does not fill in the view's contents with any specific data.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.artists_all_list_row, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.row_all_artists, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -70,9 +70,9 @@ class AllArtistsAdapter(private val artistList: List<Artist>, private val fragme
 
         Glide.with(fragment)
             .load(artistList[position].albums[0].albumUri)
-            .placeholder(R.drawable.image)
-            .error(R.drawable.image)
-            .fallback(R.drawable.image)
+            .placeholder(R.drawable.artwork_placeholder)
+            .error(R.drawable.artwork_placeholder)
+            .fallback(R.drawable.artwork_placeholder)
             .into(holder.artistArtwork)
     }
 }

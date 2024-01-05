@@ -10,13 +10,11 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Playlist
-import com.csdurnan.music.utils.PlaylistDatabase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -41,7 +39,7 @@ class AllPlaylistsAdapter(
             info = view.findViewById<TextView>(R.id.tv_playlists_all_list_info)
             popupMenuButton = view.findViewById(R.id.ib_playlists_all_list_button)
             popupMenu = PopupMenu(view.context, popupMenuButton)
-            popupMenu.inflate(R.menu.delete_playlist)
+            popupMenu.inflate(R.menu.popup_delete_playlist)
 
             popupMenuButton.setOnClickListener {
                 popupMenu.show()
@@ -52,7 +50,7 @@ class AllPlaylistsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.playlists_all_list_row, parent, false)
+            .inflate(R.layout.row_all_playlists, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -69,7 +67,7 @@ class AllPlaylistsAdapter(
 
             Glide.with(fragment)
                 .load(playlistsList[position].albumUri)
-                .placeholder(R.drawable.image)
+                .placeholder(R.drawable.artwork_placeholder)
                 .into(holder.image)
 
             holder.row.setOnClickListener {

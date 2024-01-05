@@ -38,7 +38,7 @@ class AllAlbumsAdapter(
             row = view.findViewById(R.id.cl_all_albums_row)
             popupMenuButton = view.findViewById(R.id.ib_albums_all_list_button)
             popupMenu = PopupMenu(view.context, popupMenuButton)
-            popupMenu.inflate(R.menu.album_list_popup)
+            popupMenu.inflate(R.menu.popup_album_list)
 
             popupMenuButton.setOnClickListener {
                 popupMenu.show()
@@ -54,7 +54,7 @@ class AllAlbumsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.all_albums_row, parent, false)
+            .inflate(R.layout.row_all_albums, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -98,9 +98,9 @@ class AllAlbumsAdapter(
 
         Glide.with(fragment)
             .load(albumsList[position].albumUri)
-            .placeholder(R.drawable.image)
-            .error(R.drawable.image)
-            .fallback(R.drawable.image)
+            .placeholder(R.drawable.artwork_placeholder)
+            .error(R.drawable.artwork_placeholder)
+            .fallback(R.drawable.artwork_placeholder)
             .into(holder.image)
     }
 

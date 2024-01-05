@@ -1,11 +1,8 @@
 package com.csdurnan.music.ui.albums.currentAlbum
 
-import android.content.ContentResolver
 import android.content.Context
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +14,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.R
 
 /**
@@ -44,7 +40,7 @@ class CurrentAlbum : Fragment() {
         if (selectedAlbumImage != null) {
             Glide.with(this)
                 .load(args.selectedAlbum.songs[0].imageUri)
-                .placeholder(R.drawable.image)
+                .placeholder(R.drawable.artwork_placeholder)
                 .into(selectedAlbumImage)
         }
 

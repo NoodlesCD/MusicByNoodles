@@ -22,10 +22,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
-import com.csdurnan.music.ui.songs.currentSong.CurrentSongArgs
-import com.csdurnan.music.utils.MusicBinder
-import com.csdurnan.music.utils.MusicService
-import com.csdurnan.music.utils.UpdateUiBroadcastReceiver
+import com.csdurnan.music.utils.musicService.MusicBinder
+import com.csdurnan.music.utils.musicService.MusicService
+import com.csdurnan.music.utils.musicService.UpdateUiBroadcastReceiver
 
 /**
  * A simple [Fragment] subclass.
@@ -117,7 +116,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
         pauseButton.setImageDrawable(
             ResourcesCompat.getDrawable(
                 resources,
-                R.drawable.baseline_pause_24,
+                R.drawable.controls_pause,
                 null
             )
         )
@@ -127,7 +126,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
                 pauseButton.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
-                        R.drawable.baseline_play_arrow_24,
+                        R.drawable.controls_play,
                         null
                     )
                 )
@@ -136,7 +135,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
                 pauseButton.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
-                        R.drawable.baseline_pause_24,
+                        R.drawable.controls_pause,
                         null
                     )
                 )
@@ -150,7 +149,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
             pauseButton.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
-                    R.drawable.baseline_pause_24,
+                    R.drawable.controls_pause,
                     null
                 )
             )
@@ -161,7 +160,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
             pauseButton.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
-                    R.drawable.baseline_pause_24,
+                    R.drawable.controls_pause,
                     null
                 )
             )
@@ -219,7 +218,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
         if (image != null) {
             Glide.with(this)
                 .load(currentSong.imageUri)
-                .placeholder(R.drawable.image)
+                .placeholder(R.drawable.artwork_placeholder)
                 .into(image)
         }
     }

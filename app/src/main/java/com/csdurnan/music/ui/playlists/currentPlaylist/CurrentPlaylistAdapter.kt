@@ -9,16 +9,11 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
-import com.csdurnan.music.dc.Playlist
-import com.csdurnan.music.dc.PlaylistSongCrossRef
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.utils.PlaylistDatabase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -42,7 +37,7 @@ class CurrentPlaylistAdapter(
             songArtist = view.findViewById(R.id.tv_current_playlist_list_artist)
             imageButton = view.findViewById(R.id.ib_current_playlist_list_button)
             popupMenu = PopupMenu(view.context, imageButton)
-            popupMenu.inflate(R.menu.remove_song)
+            popupMenu.inflate(R.menu.popup_remove_song_playlist)
             imageButton.setOnClickListener {
                 popupMenu.show()
             }
@@ -52,7 +47,7 @@ class CurrentPlaylistAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.current_playlist_row, parent, false)
+            .inflate(R.layout.row_current_playlist, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -66,7 +61,7 @@ class CurrentPlaylistAdapter(
         holder.songArtist.text = songs[position].artist
         Glide.with(fragment)
             .load(songs[position].imageUri)
-            .placeholder(R.drawable.image)
+            .placeholder(R.drawable.artwork_placeholder)
             .into(holder.songImage)
 
         holder.currentRow.setOnClickListener {

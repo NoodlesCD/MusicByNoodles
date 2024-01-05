@@ -1,4 +1,4 @@
-package com.csdurnan.music
+package com.csdurnan.music.utils
 
 import android.content.ContentResolver
 import android.content.ContentUris

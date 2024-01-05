@@ -47,7 +47,7 @@
             android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/current_song_background"
+            android:background="@drawable/background_current_song_bar"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:visibility="visible"
@@ -76,7 +76,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/image"
+                app:srcCompat="@drawable/artwork_placeholder"
                 app:shapeAppearanceOverlay="@style/roundedImageView"
                 android:layout_marginBottom="8dp"/>
 
@@ -130,7 +130,7 @@
                 android:id="@+id/iv_current_song_play_pause"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:src="@drawable/baseline_pause_24"
+                android:src="@drawable/controls_pause"
                 android:layout_gravity="end"
                 android:layout_marginBottom="10dp"/>
 
@@ -147,7 +147,7 @@
         android:background="#00000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/nav_host_fragment"
-        app:menu="@menu/my_navigation_items"  />
+        app:menu="@menu/navigation_bottom_items"  />
 
     <View
         android:id="@+id/view2"

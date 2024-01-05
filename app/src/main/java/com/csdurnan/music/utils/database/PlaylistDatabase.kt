@@ -1,4 +1,4 @@
-package com.csdurnan.music.utils
+package com.csdurnan.music.utils.database
 
 import android.content.Context
 import androidx.room.Database
@@ -8,8 +8,6 @@ import androidx.room.TypeConverters
 import com.csdurnan.music.dc.Playlist
 import com.csdurnan.music.dc.PlaylistSongCrossRef
 import com.csdurnan.music.dc.Song
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @Database(
     entities = [

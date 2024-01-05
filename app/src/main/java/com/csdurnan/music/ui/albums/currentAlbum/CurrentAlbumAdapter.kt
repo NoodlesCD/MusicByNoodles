@@ -31,13 +31,13 @@ class CurrentAlbumAdapter(private val currentAlbum: Album, private val onAlbumIt
 
             popupMenuButton = view.findViewById(R.id.ib_current_album_songs_button)
             popupMenu = PopupMenu(view.context, popupMenuButton)
-            popupMenu.inflate(R.menu.album_list_popup)
+            popupMenu.inflate(R.menu.popup_album_list)
             popupMenuButton.setOnClickListener { popupMenu.show() }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.current_album_list_row, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_current_album, parent, false)
         return ViewHolder(view)
     }
 

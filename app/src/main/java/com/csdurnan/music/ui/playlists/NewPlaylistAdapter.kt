@@ -12,15 +12,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Playlist
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.utils.PlaylistDatabase
+import com.csdurnan.music.utils.database.PlaylistDatabase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.ArrayList
 
 class NewPlaylistAdapter(
     private val songsToAdd: List<Song>,
@@ -45,7 +43,7 @@ class NewPlaylistAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.playlists_all_list_row, parent, false)
+            .inflate(R.layout.row_all_playlists, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -60,7 +58,7 @@ class NewPlaylistAdapter(
             holder.playlistTitle.text = parentFragment.context?.getString(R.string.new_playlist)
             holder.playlistSongCount.text = ""
             Glide.with(parentFragment)
-                .load(R.drawable.image)
+                .load(R.drawable.artwork_placeholder)
                 .into(holder.playlistImage)
 
             val editText = EditText(parentFragment.requireContext())
@@ -105,7 +103,7 @@ class NewPlaylistAdapter(
             val image = playlists[arrayPosition].albumUri
             Glide.with(parentFragment)
                 .load(image)
-                .placeholder(R.drawable.image)
+                .placeholder(R.drawable.artwork_placeholder)
                 .into(holder.playlistImage)
 
             holder.currentRow.setOnClickListener {

@@ -33,7 +33,7 @@ class CurrentArtistAdapter(private val albumList: MutableList<Album>, private va
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.current_artist_album_list_row, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_current_artist, parent, false)
         return ViewHolder(view)
     }
 
@@ -49,7 +49,7 @@ class CurrentArtistAdapter(private val albumList: MutableList<Album>, private va
 
         Glide.with(fragment)
             .load(albumList[position].albumUri)
-            .placeholder(R.drawable.image)
+            .placeholder(R.drawable.artwork_placeholder)
             .into(holder.image)
 
         holder.row.setOnClickListener {

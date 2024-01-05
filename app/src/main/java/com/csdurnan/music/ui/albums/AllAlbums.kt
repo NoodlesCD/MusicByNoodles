@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.csdurnan.music.ContentManagement
+import com.csdurnan.music.utils.ContentManagement
 import com.csdurnan.music.R
 
 /**
