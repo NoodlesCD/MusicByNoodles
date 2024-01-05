@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 class NewPlaylistAdapter(
-    private val songToAdd: Song,
+    private val songsToAdd: List<Song>,
     private var playlists: List<Playlist>,
     private val parentFragment: Fragment
 ) : RecyclerView.Adapter<NewPlaylistAdapter.ViewHolder>() {
@@ -75,9 +75,9 @@ class NewPlaylistAdapter(
                     val playlist = Playlist(
                         null,
                         editText.text.toString(),
-                        1,
-                        songToAdd.imageUri,
-                        listOf(songToAdd))
+                        songsToAdd.size,
+                        songsToAdd[0].imageUri,
+                        songsToAdd)
                     GlobalScope.launch {
                         pLDao.insertPlaylistAndSongs(playlist)
                     }
@@ -111,7 +111,9 @@ class NewPlaylistAdapter(
             holder.currentRow.setOnClickListener {
                 GlobalScope.launch {
                     val db = PlaylistDatabase.getInstance(parentFragment.requireContext()).dao
-                    db.insertSongToPlaylist(playlists[arrayPosition].id!!, songToAdd)
+                    for (song in songsToAdd) {
+                        db.insertSongToPlaylist(playlists[arrayPosition].id!!, song)
+                    }
                 }
 
                 val action = NewPlaylistDirections.actionNewPlaylistToAllPlaylists()

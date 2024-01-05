@@ -1,5 +1,6 @@
 package com.csdurnan.music.ui.playlists.currentPlaylist
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,9 +77,23 @@ class CurrentPlaylistAdapter(
         holder.popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.remove_song -> {
-                    GlobalScope.launch {
-                        fragment.deletePlaylistSong(songs[position].id)
-                    }
+                    val builder = AlertDialog.Builder(fragment.context)
+                    builder
+                        .setTitle("Remove song?")
+                        .setPositiveButton("Confirm") {
+                                _, _ ->
+                            GlobalScope.launch {
+                                fragment.deletePlaylistSong(songs[position].id)
+                            }
+                        }
+                        .setNegativeButton("Cancel") {
+                                dialog, _ ->
+                            dialog.cancel()
+                        }
+
+                    val dialog = builder.create()
+                    dialog.show()
+
                     true
                 }
                 else -> false

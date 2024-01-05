@@ -59,6 +59,10 @@ class CurrentAlbumAdapter(private val currentAlbum: Album, private val onAlbumIt
                     onAlbumItemClickListener.onAlbumItemClick(item.itemId, currentAlbum.songs[position])
                     true
                 }
+                R.id.song_list_pop_add_playlist -> {
+                    onAlbumItemClickListener.onAlbumItemClick(item.itemId, currentAlbum.songs[position])
+                    true
+                }
                 R.id.song_list_popup_artist -> {
                     onAlbumItemClickListener.onAlbumItemClick(item.itemId, currentAlbum.songs[position])
                     true

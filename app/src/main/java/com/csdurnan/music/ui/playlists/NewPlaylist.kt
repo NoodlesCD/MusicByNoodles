@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Playlist
+import com.csdurnan.music.dc.Song
 import com.csdurnan.music.utils.PlaylistDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,7 @@ class NewPlaylist : Fragment() {
         val playlists: List<Playlist> = listOf()
 
         val playlistsRecyclerView = view.findViewById<RecyclerView>(R.id.rv_new_playlist_list)
-        val adapter = NewPlaylistAdapter(args.song, playlists, this)
+        val adapter = NewPlaylistAdapter(args.song.asList(), playlists, this)
 
         playlistsRecyclerView.setHasFixedSize(true)
         playlistsRecyclerView.layoutManager = LinearLayoutManager(view.context)

@@ -14,6 +14,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -24,6 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.navigation.NavHost
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
@@ -31,9 +33,14 @@ import com.bumptech.glide.request.RequestOptions
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.MainNavDirections
 import com.csdurnan.music.R
+import com.csdurnan.music.dc.Album
 import com.csdurnan.music.dc.Song
+import com.csdurnan.music.ui.albums.AllAlbums
+import com.csdurnan.music.ui.albums.AllAlbumsAdapter
 import com.csdurnan.music.ui.albums.AllAlbumsDirections
 import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumAdapter
+import com.csdurnan.music.ui.playlists.AllPlaylists
+import com.csdurnan.music.ui.playlists.AllPlaylistsAdapter
 import com.csdurnan.music.ui.playlists.currentPlaylist.CurrentPlaylistAdapter
 import com.csdurnan.music.ui.songs.AllSongsAdapter
 import com.csdurnan.music.ui.songs.AllSongsDirections
@@ -43,12 +50,16 @@ import com.csdurnan.music.utils.MusicBinder
 import com.csdurnan.music.utils.MusicService
 import com.csdurnan.music.utils.UpdateUiBroadcastReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 class MainActivity :
     AppCompatActivity(),
     MainActivityCurrentSongBarCallback,
     AllSongsAdapter.OnSongsItemClickListener,
+    AllAlbumsAdapter.OnAllAlbumsItemClickListener,
     CurrentAlbumAdapter.OnAlbumItemClickListener {
 
     /** Sets up the musicService whenever a song is selected for the first time.. */
@@ -211,6 +222,17 @@ class MainActivity :
                 )
             }
         }
+
+        val decorView = window.decorView
+        val rootView = decorView.findViewById(R.id.nav_host_fragment) as ViewGroup
+        val windowBackground = decorView.background
+
+        val blurView = findViewById<BlurView>(R.id.linearLayout3)
+        blurView.setupWith(rootView, RenderScriptBlur(this))
+            .setFrameClearDrawable(windowBackground)
+            .setBlurRadius(3f)
+
+
     }
 
 
@@ -231,14 +253,14 @@ class MainActivity :
                 .into(background)
         }
 
-        val currentSongBackground = findViewById<ImageView>(R.id.current_song_bar_bg)
-        if (background != null) {
-            Glide.with(this)
-                .load(musicService?.songInfo()?.imageUri)
-                .placeholder(R.drawable.image)
-                .apply(RequestOptions.bitmapTransform(BlurTransformation(25,3)))
-                .into(background)
-        }
+//        val currentSongBackground = findViewById<ImageView>(R.id.current_song_bar_bg)
+//        if (background != null) {
+//            Glide.with(this)
+//                .load(musicService?.songInfo()?.imageUri)
+//                .placeholder(R.drawable.image)
+//                .apply(RequestOptions.bitmapTransform(BlurTransformation(25,3)))
+//                .into(background)
+//        }
 
         val currentSongTitle = findViewById<TextView>(R.id.tv_current_song_title)
         currentSongTitle.text = currentSong?.title
@@ -305,7 +327,7 @@ class MainActivity :
                     musicService?.addToQueue(song.id)
                 }
                 R.id.song_list_pop_add_playlist -> {
-                    val action = AllSongsDirections.actionGlobalNewPlaylist(song)
+                    val action = AllSongsDirections.actionGlobalNewPlaylist(arrayOf(song))
                     navController.navigate(action)
                 }
                 R.id.song_list_popup_artist -> {
@@ -331,11 +353,35 @@ class MainActivity :
                 musicService?.addToQueue(song.id)
             }
             R.id.song_list_pop_add_playlist -> {
-                val action = AllAlbumsDirections.actionGlobalNewPlaylist(song)
+                val action = AllAlbumsDirections.actionGlobalNewPlaylist(arrayOf(song))
                 navController.navigate(action)
             }
             R.id.song_list_popup_artist -> {
                 val action = AllAlbumsDirections.actionGlobalCurrentArtist(cm.artistsList[song.artistId]!!)
+                navController.navigate(action)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    override fun onAllAlbumsItemClick(position: Int, album: Album) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        val cm = ContentManagement(applicationContext.contentResolver)
+
+        when (position) {
+            R.id.song_list_popup_add_queue -> {
+                for (song in album.songs) {
+                    musicService?.addToQueue(song.id)
+                }
+            }
+            R.id.song_list_popup_add_playlist -> {
+                val action = AllAlbumsDirections.actionGlobalNewPlaylist(album.songs.toTypedArray())
+                navController.navigate(action)
+            }
+            R.id.song_list_popup_artist -> {
+                val action = AllAlbumsDirections.actionGlobalCurrentArtist(cm.artistsList[album.artistId]!!)
                 navController.navigate(action)
             }
         }

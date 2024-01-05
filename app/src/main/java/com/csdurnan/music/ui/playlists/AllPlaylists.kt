@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
  * Use the [all_playlists.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AllPlaylists : Fragment() {
+class AllPlaylists : Fragment(), AllPlaylistsAdapter.DeletePlaylist {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,4 +45,11 @@ class AllPlaylists : Fragment() {
 
         return view
     }
+
+    override suspend fun deletePlaylist(playlist: Playlist) {
+        val db = PlaylistDatabase.getInstance(requireContext()).dao
+        db.deletePlaylist(playlist)
+    }
+
+
 }

@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="65dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:id="@+id/cl_all_artist_list_row">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_artist_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +36,7 @@
             android:includeFontPadding="false"
             android:text="TextView"
             android:textColor="@color/list_font_large"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:ellipsize="end"
             android:maxLines="1"/>
 
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textColor="@color/list_font_small"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <View

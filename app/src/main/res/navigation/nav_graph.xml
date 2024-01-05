@@ -150,7 +150,7 @@
             app:destination="@id/playlists" />
         <argument
             android:name="song"
-            app:argType="com.csdurnan.music.dc.Song" />
+            app:argType="com.csdurnan.music.dc.Song[]" />
     </fragment>
     <fragment
         android:id="@+id/playlists"

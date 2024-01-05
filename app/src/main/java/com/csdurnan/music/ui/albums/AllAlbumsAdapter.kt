@@ -3,7 +3,9 @@ package com.csdurnan.music.ui.albums
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -15,7 +17,8 @@ import com.csdurnan.music.dc.Album
 
 class AllAlbumsAdapter(
     private val albumsList: List<Album>,
-    private val fragment: Fragment
+    private val fragment: Fragment,
+    private val onAllAlbumsItemClickListener: OnAllAlbumsItemClickListener
 ) : RecyclerView.Adapter<AllAlbumsAdapter.ViewHolder>() {
     /**
      * Provides a reference to the type of views that we will be using.
@@ -25,12 +28,21 @@ class AllAlbumsAdapter(
         val artistName: TextView
         val image: ImageView
         val row: ConstraintLayout
+        val popupMenuButton: ImageButton
+        val popupMenu: PopupMenu
 
         init {
             albumName = view.findViewById(R.id.tv_all_albums_row_title)
             artistName = view.findViewById(R.id.tv_all_albums_row_artist)
             image = view.findViewById(R.id.iv_all_albums_row_image)
             row = view.findViewById(R.id.cl_all_albums_row)
+            popupMenuButton = view.findViewById(R.id.ib_albums_all_list_button)
+            popupMenu = PopupMenu(view.context, popupMenuButton)
+            popupMenu.inflate(R.menu.album_list_popup)
+
+            popupMenuButton.setOnClickListener {
+                popupMenu.show()
+            }
         }
     }
 
@@ -66,11 +78,33 @@ class AllAlbumsAdapter(
             it.findNavController().navigate(action)
         }
 
+        holder.popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.song_list_popup_add_queue -> {
+                    onAllAlbumsItemClickListener.onAllAlbumsItemClick(item.itemId, albumsList[position])
+                    true
+                }
+                R.id.song_list_popup_add_playlist -> {
+                    onAllAlbumsItemClickListener.onAllAlbumsItemClick(item.itemId, albumsList[position])
+                    true
+                }
+                R.id.song_list_popup_artist -> {
+                    onAllAlbumsItemClickListener.onAllAlbumsItemClick(item.itemId, albumsList[position])
+                    true
+                }
+                else -> false
+            }
+        }
+
         Glide.with(fragment)
             .load(albumsList[position].albumUri)
             .placeholder(R.drawable.image)
             .error(R.drawable.image)
             .fallback(R.drawable.image)
             .into(holder.image)
+    }
+
+    interface OnAllAlbumsItemClickListener {
+        fun onAllAlbumsItemClick(position: Int, album: Album)
     }
 }

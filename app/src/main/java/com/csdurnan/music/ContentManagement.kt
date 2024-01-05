@@ -63,7 +63,7 @@ class ContentManagement(contentResolver: ContentResolver) {
 
                             // If the artist does not already exist in the list, create one.
                             if (artistsList[artistId] == null) {
-                                val newAlbum = mutableListOf(Album(album, artist, mutableListOf(newSong), imgUri))
+                                val newAlbum = mutableListOf(Album(album, artist, artistId, mutableListOf(newSong), imgUri))
                                 artistsList[artistId] = Artist(artist, newAlbum, 1)
                             }
                             // If the artist already exists.
@@ -80,7 +80,7 @@ class ContentManagement(contentResolver: ContentResolver) {
                                 }
 
                                 if (!existingAlbum) {
-                                    var newAlbum = Album(album, artist, mutableListOf(newSong), imgUri)
+                                    var newAlbum = Album(album, artist, artistId, mutableListOf(newSong), imgUri)
                                     artistsList.getValue(artistId).albums.add(newAlbum)
                                 }
 
@@ -88,7 +88,7 @@ class ContentManagement(contentResolver: ContentResolver) {
                             }
 
                             if (albumsList[albumId] == null) {
-                                albumsList[albumId] = Album(album, artist, mutableListOf(newSong), imgUri)
+                                albumsList[albumId] = Album(album, artist, artistId, mutableListOf(newSong), imgUri)
                             } else {
                                 albumsList[albumId]?.songs?.add(newSong)
                             }

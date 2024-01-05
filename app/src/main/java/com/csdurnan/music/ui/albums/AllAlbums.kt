@@ -1,5 +1,6 @@
 package com.csdurnan.music.ui.albums
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ import com.csdurnan.music.R
  */
 class AllAlbums : Fragment() {
 
+    private lateinit var onAllAlbumsItemClickListener: AllAlbumsAdapter.OnAllAlbumsItemClickListener
+
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,8 +34,13 @@ class AllAlbums : Fragment() {
         val allAlbumsRecyclerView = view.findViewById<RecyclerView>(R.id.rv_all_albums_list)
         allAlbumsRecyclerView.setHasFixedSize(true)
         allAlbumsRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        allAlbumsRecyclerView.adapter = AllAlbumsAdapter(cm.albums, this)
+        allAlbumsRecyclerView.adapter = AllAlbumsAdapter(cm.albums, this, onAllAlbumsItemClickListener)
 
         return view
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        onAllAlbumsItemClickListener = context as AllAlbumsAdapter.OnAllAlbumsItemClickListener
     }
 }
