@@ -11,4 +11,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="playlists">Playlists</string>
+    <string name="playlists_songs">%1$s songs</string>
+    <string name="new_playlist">New Playlist</string>
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="remove_song">Remove song</string>
 </resources>

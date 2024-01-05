@@ -37,7 +37,9 @@ class MusicService :
         when (focusState) {
             /** The application is now the sole source of audio the user is listening to. */
             AudioManager.AUDIOFOCUS_GAIN -> {
-                mediaPlayer.start()
+                if (!isPaused()) {
+                    mediaPlayer.start()
+                }
                 mediaPlayer.setVolume(1.0F, 1.0F)
             }
 

@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Album(
-    val albumTitle: String,
+    val title: String,
     val artist: String,
     val songs: MutableList<Song>,
     val albumUri: Uri,

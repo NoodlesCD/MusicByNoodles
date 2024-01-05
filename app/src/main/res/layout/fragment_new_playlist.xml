@@ -4,19 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.songs.AllSongs"
-    android:tag="all_songs_fragment"
-    android:id="@+id/frag_all_songs">
+    tools:context=".ui.playlists.NewPlaylist"
+    android:tag="new_playlist_fragment"
+    android:id="@+id/frag_new_playlist">
 
-    <in.myinnos.alphabetsindexfastscrollrecycler.IndexFastScrollRecyclerView
-        android:id="@+id/rv_all_songs_list"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_new_playlist_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="120dp"
         android:paddingTop="90dp"
-        android:clipToPadding="false"
-        android:scrollbars="vertical"
-        />
+        android:clipToPadding="false"/>
 
     <View
         android:id="@+id/v_top_shadow"
@@ -36,7 +34,7 @@
         app:layout_constraintTop_toTopOf="@+id/v_top_shadow"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/noto_sans"
-        android:text="@string/songs"
+        android:text="@string/playlists"
         android:shadowColor="@color/black"
         android:shadowRadius="15"
         android:textColor="@color/list_font_large"

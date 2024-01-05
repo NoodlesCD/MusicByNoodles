@@ -1,12 +1,22 @@
 package com.csdurnan.music.dc
 
+import android.net.Uri
+import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
-@Entity
-data class Playlist(
+@Parcelize
+@Entity(tableName = "playlists")
+data class Playlist @JvmOverloads constructor (
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @ColumnInfo(name = "playlist_id")
+    val id: Long?,
     val name: String,
-    //val songs: ArrayList<Song>
-)
+    val songCount: Int,
+    val albumUri: Uri,
+    @Ignore val songs: List<Song>? = emptyList()
+) : Parcelable

@@ -37,6 +37,12 @@
         <action
             android:id="@+id/action_songs_to_currentAlbum"
             app:destination="@id/currentAlbum" />
+        <action
+            android:id="@+id/action_songs_to_newPlaylist"
+            app:destination="@id/newPlaylist" />
+        <action
+            android:id="@+id/action_songs_to_allPlaylists"
+            app:destination="@id/playlists" />
     </fragment>
     <fragment
         android:id="@+id/artists"
@@ -57,6 +63,9 @@
         <action
             android:id="@+id/action_artists_to_currentArtist"
             app:destination="@id/currentArtist" />
+        <action
+            android:id="@+id/action_artists_to_allPlaylists"
+            app:destination="@id/playlists" />
     </fragment>
     <fragment
         android:id="@+id/albums"
@@ -79,6 +88,9 @@
         <action
             android:id="@+id/action_AllAlbums_to_currentAlbum"
             app:destination="@id/currentAlbum" />
+        <action
+            android:id="@+id/action_albums_to_allPlaylists"
+            app:destination="@id/playlists" />
     </fragment>
     <fragment
         android:id="@+id/currentSong"
@@ -88,6 +100,9 @@
         <argument
             android:name="songId"
             app:argType="long"/>
+        <action
+            android:id="@+id/action_currentSong_to_newPlaylist"
+            app:destination="@id/newPlaylist" />
     </fragment>
     <fragment
         android:id="@+id/currentAlbum"
@@ -100,6 +115,12 @@
         <argument
             android:name="selectedAlbum"
             app:argType="com.csdurnan.music.dc.Album" />
+        <action
+            android:id="@+id/action_currentAlbum_to_newPlaylist"
+            app:destination="@id/newPlaylist" />
+        <action
+            android:id="@+id/action_currentAlbum_to_allPlaylists"
+            app:destination="@id/playlists" />
     </fragment>
     <fragment
         android:id="@+id/currentArtist"
@@ -115,5 +136,42 @@
         <action
             android:id="@+id/action_currentArtist_to_currentAlbum"
             app:destination="@id/currentAlbum" />
+        <action
+            android:id="@+id/action_currentArtist_to_allPlaylists"
+            app:destination="@id/playlists" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPlaylist"
+        android:name="com.csdurnan.music.ui.playlists.NewPlaylist"
+        android:label="fragment_new_playlist"
+        tools:layout="@layout/fragment_new_playlist" >
+        <action
+            android:id="@+id/action_newPlaylist_to_allPlaylists"
+            app:destination="@id/playlists" />
+        <argument
+            android:name="song"
+            app:argType="com.csdurnan.music.dc.Song" />
+    </fragment>
+    <fragment
+        android:id="@+id/playlists"
+        android:name="com.csdurnan.music.ui.playlists.AllPlaylists"
+        android:label="Playlists"
+        tools:layout="@layout/fragment_all_playlists">
+        <action
+            android:id="@+id/action_allPlaylists_to_currentPlaylist"
+            app:destination="@id/currentPlaylist" />
+    </fragment>
+    <action android:id="@+id/action_global_newPlaylist" app:destination="@id/newPlaylist" />
+    <fragment
+        android:id="@+id/currentPlaylist"
+        android:name="com.csdurnan.music.ui.playlists.currentPlaylist.CurrentPlaylist"
+        android:label="fragment_current_playlist"
+        tools:layout="@layout/fragment_current_playlist" >
+        <argument
+            android:name="id"
+            app:argType="long" />
+        <argument
+            android:name="playlist"
+            app:argType="com.csdurnan.music.dc.Playlist" />
     </fragment>
 </navigation>

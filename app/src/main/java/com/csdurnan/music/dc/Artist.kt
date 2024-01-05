@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Artist(
-    var artistTitle: String,
+    var name: String,
     var albums: MutableList<Album>,
     var songCount: Int
 ): Parcelable

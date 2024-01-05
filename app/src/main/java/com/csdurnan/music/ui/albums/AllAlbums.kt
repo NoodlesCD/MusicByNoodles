@@ -1,6 +1,5 @@
 package com.csdurnan.music.ui.albums
 
-import android.content.ContentResolver
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,16 +21,16 @@ class AllAlbums : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val resolver: ContentResolver = requireActivity().contentResolver
-        val cm: ContentManagement = ContentManagement(resolver)
+        val cm = ContentManagement(requireActivity().contentResolver)
 
-        var view = inflater.inflate(R.layout.fragment_all_albums, container, false)
-        var allAlbumsRecyclerView = view.findViewById<RecyclerView>(R.id.rv_all_albums_list)
-        allAlbumsRecyclerView.layoutManager = LinearLayoutManager(view.context)
+        val view = inflater.inflate(R.layout.fragment_all_albums, container, false)
+        val allAlbumsRecyclerView = view.findViewById<RecyclerView>(R.id.rv_all_albums_list)
         allAlbumsRecyclerView.setHasFixedSize(true)
+        allAlbumsRecyclerView.layoutManager = LinearLayoutManager(view.context)
         allAlbumsRecyclerView.adapter = AllAlbumsAdapter(cm.albums, this)
 
         return view

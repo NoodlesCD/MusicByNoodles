@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.R
-import com.csdurnan.music.ui.artists.currentArtist.CurrentArtistArgs
 
 /**
  * A simple [Fragment] subclass.
@@ -40,7 +39,7 @@ class CurrentArtist : Fragment() {
 
         val args: CurrentArtistArgs by navArgs()
 
-        view.findViewById<TextView>(R.id.tv_current_artist_title).text = args.selectedArtist.artistTitle
+        view.findViewById<TextView>(R.id.tv_current_artist_title).text = args.selectedArtist.name
         view.findViewById<TextView>(R.id.tv_current_artist_info).text = "" + args.selectedArtist.albums.size + " albums - " + args.selectedArtist.songCount + " songs"
 
         val image = view.findViewById<ImageView>(R.id.iv_current_artist_image)

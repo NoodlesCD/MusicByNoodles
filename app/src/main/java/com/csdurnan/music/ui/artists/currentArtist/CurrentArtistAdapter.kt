@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
-import com.csdurnan.music.ui.artists.currentArtist.CurrentArtistDirections
 
 class CurrentArtistAdapter(private val albumList: MutableList<Album>, private val fragment: Fragment) : RecyclerView.Adapter<CurrentArtistAdapter.ViewHolder>() {
 
@@ -44,7 +43,7 @@ class CurrentArtistAdapter(private val albumList: MutableList<Album>, private va
 
     @SuppressLint("StringFormatMatches")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.albumName.text = albumList[position].albumTitle
+        holder.albumName.text = albumList[position].title
         holder.albumInfo.text =
             holder.context.getString(R.string.artist_adapter_songs, albumList[position].songs.size)
 

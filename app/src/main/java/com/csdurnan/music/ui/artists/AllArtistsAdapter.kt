@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Artist
 
-class AllArtistsAdapter(private val artistList: ArrayList<Artist>, private val fragment: Fragment) : RecyclerView.Adapter<AllArtistsAdapter.ViewHolder>() {
+class AllArtistsAdapter(private val artistList: List<Artist>, private val fragment: Fragment) : RecyclerView.Adapter<AllArtistsAdapter.ViewHolder>() {
     /**
      * Provides a reference to the type of views that we will be using.
      */
@@ -56,7 +56,7 @@ class AllArtistsAdapter(private val artistList: ArrayList<Artist>, private val f
      */
     @SuppressLint("StringFormatMatches")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.artistName.text = artistList[position].artistTitle
+        holder.artistName.text = artistList[position].name
         holder.artistDetails.text = fragment.context?.getString(
             R.string.albums_songs,
             artistList[position].albums.size,
@@ -71,6 +71,8 @@ class AllArtistsAdapter(private val artistList: ArrayList<Artist>, private val f
         Glide.with(fragment)
             .load(artistList[position].albums[0].albumUri)
             .placeholder(R.drawable.image)
+            .error(R.drawable.image)
+            .fallback(R.drawable.image)
             .into(holder.artistArtwork)
     }
 }

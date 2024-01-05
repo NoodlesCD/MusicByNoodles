@@ -42,6 +42,10 @@ class AllSongsViewHolder(val view: View, private val onSongsItemClickListener: A
                     onSongsItemClickListener.onSongItemClick(item.itemId, song)
                     true
                 }
+                R.id.song_list_pop_add_playlist -> {
+                    onSongsItemClickListener.onSongItemClick(item.itemId, song)
+                    true
+                }
                 R.id.song_list_popup_artist -> {
                     onSongsItemClickListener.onSongItemClick(item.itemId, song)
                     true
@@ -57,6 +61,8 @@ class AllSongsViewHolder(val view: View, private val onSongsItemClickListener: A
         Glide.with(view)
             .load(song.imageUri)
             .placeholder(R.drawable.image)
+            .error(R.drawable.image)
+            .fallback(R.drawable.image)
             .into(image)
     }
 }

@@ -12,7 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.R
+import com.reddit.indicatorfastscroll.FastScrollItemIndicator
+import com.reddit.indicatorfastscroll.FastScrollerView
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -34,23 +37,12 @@ class AllSongs : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_all_songs, container, false)
-
-        /** Creates a ViewModel used to page the song list to the RecyclerView. */
-        val viewModel by viewModels<AllSongsViewModel>()
-        viewModel.setContentManagement(requireActivity().contentResolver)
+        val cm = ContentManagement(requireContext().contentResolver)
 
         val allSongsRecyclerView = view.findViewById<RecyclerView>(R.id.rv_all_songs_list)
-        allSongsPagingAdapter = AllSongsPagingAdapter(onSongsItemClickListener)
-        allSongsRecyclerView.adapter = allSongsPagingAdapter
+        allSongsRecyclerView.adapter = AllSongsAdapter(cm.songs, this, onSongsItemClickListener)
         allSongsRecyclerView.layoutManager = LinearLayoutManager(view.context)
         allSongsRecyclerView.setHasFixedSize(true)
-
-        /** Pages data to the RecyclerView as the user scrolls. */
-        lifecycleScope.launch {
-            viewModel.getAllSongsPagingData().collectLatest { pagingData ->
-                allSongsPagingAdapter.submitData(pagingData)
-            }
-        }
 
         return view
     }

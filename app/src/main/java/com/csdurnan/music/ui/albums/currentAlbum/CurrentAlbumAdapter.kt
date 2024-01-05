@@ -13,21 +13,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumDirections
 
 class CurrentAlbumAdapter(private val currentAlbum: Album, private val onAlbumItemClickListener: OnAlbumItemClickListener, private val fragment: Fragment) : RecyclerView.Adapter<CurrentAlbumAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val currentRow: ConstraintLayout
         val index: TextView
         val songName: TextView
-        val row: ConstraintLayout
+
         val popupMenuButton: ImageButton
         val popupMenu: PopupMenu
 
         init {
             index = view.findViewById(R.id.tv_current_album_list_index)
             songName = view.findViewById(R.id.tv_current_album_list_title)
-            row = view.findViewById(R.id.cl_current_album_song_row)
+            currentRow = view.findViewById(R.id.cl_current_album_song_row)
 
             popupMenuButton = view.findViewById(R.id.ib_current_album_songs_button)
             popupMenu = PopupMenu(view.context, popupMenuButton)
@@ -48,7 +48,7 @@ class CurrentAlbumAdapter(private val currentAlbum: Album, private val onAlbumIt
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.index.text = (position + 1).toString()
         holder.songName.text = currentAlbum.songs[position].title
-        holder.row.setOnClickListener {
+        holder.currentRow.setOnClickListener {
             val action =
                 CurrentAlbumDirections.actionGlobalCurrentSong(currentAlbum.songs[position].id)
             it.findNavController().navigate(action)

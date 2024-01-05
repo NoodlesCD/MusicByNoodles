@@ -32,7 +32,9 @@ import com.csdurnan.music.ContentManagement
 import com.csdurnan.music.MainNavDirections
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Song
+import com.csdurnan.music.ui.albums.AllAlbumsDirections
 import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumAdapter
+import com.csdurnan.music.ui.playlists.currentPlaylist.CurrentPlaylistAdapter
 import com.csdurnan.music.ui.songs.AllSongsAdapter
 import com.csdurnan.music.ui.songs.AllSongsDirections
 import com.csdurnan.music.ui.songs.currentSong.SongSelectorViewModel
@@ -43,7 +45,11 @@ import com.csdurnan.music.utils.UpdateUiBroadcastReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.glide.transformations.BlurTransformation
 
-class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, AllSongsAdapter.OnSongsItemClickListener, CurrentAlbumAdapter.OnAlbumItemClickListener {
+class MainActivity :
+    AppCompatActivity(),
+    MainActivityCurrentSongBarCallback,
+    AllSongsAdapter.OnSongsItemClickListener,
+    CurrentAlbumAdapter.OnAlbumItemClickListener {
 
     /** Sets up the musicService whenever a song is selected for the first time.. */
     private var musicService: MusicService? = null
@@ -139,6 +145,10 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.playlists -> {
+                    navController.navigate(R.id.playlists)
+                    true
+                }
                 R.id.artists -> {
                     navController.navigate(R.id.artists)
                     true
@@ -164,7 +174,7 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
             } else {
                 songBarVisibility(View.VISIBLE)
                 findViewById<ImageView>(R.id.current_song).visibility = View.GONE
-                Handler(Looper.getMainLooper()).post(currentPositionTimer)
+                //Handler(Looper.getMainLooper()).post(currentPositionTimer)
             }
         }
 
@@ -251,10 +261,12 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
      */
     private fun songBarVisibility(visibility: Int) {
         val currentSongBar = findViewById<ConstraintLayout>(R.id.cl_current_song_bar)
-        if (visibility == View.VISIBLE && (musicService?.isPlaying() == true || musicService?.isPaused() == true)) {
-            currentSongBar.visibility = View.VISIBLE
-        } else if (visibility == View.GONE) {
-            currentSongBar.visibility = visibility
+        if (musicService != null && musicBound == true) {
+            if (visibility == View.VISIBLE && (musicService?.isPlaying() == true || musicService?.isPaused() == true)) {
+                currentSongBar.visibility = View.VISIBLE
+            } else if (visibility == View.GONE) {
+                currentSongBar.visibility = visibility
+            }
         }
     }
 
@@ -263,14 +275,15 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
         override fun run() {
             runOnUiThread {
                 if (musicBound) {
-                    if (musicService?.isPlaying() == true) {
-                        val bar = findViewById<ProgressBar>(R.id.pb_current_song_progress)
-                        bar?.max = musicService?.songInfo()?.duration!!
-                        bar?.progress = musicService?.currentPosition()!!
+                    if (musicService != null) {
+                        if (musicService?.isPlaying() == true) {
+                            val bar = findViewById<ProgressBar>(R.id.pb_current_song_progress)
+                            bar?.max = musicService?.songInfo()?.duration!!
+                            bar?.progress = musicService?.currentPosition()!!
+                        }
                     }
-                }
+                    }
             }
-
             Handler(Looper.getMainLooper()).postDelayed(this, 1000)
         }
     }
@@ -290,6 +303,10 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
         when (position) {
                 R.id.song_list_popup_add_queue -> {
                     musicService?.addToQueue(song.id)
+                }
+                R.id.song_list_pop_add_playlist -> {
+                    val action = AllSongsDirections.actionGlobalNewPlaylist(song)
+                    navController.navigate(action)
                 }
                 R.id.song_list_popup_artist -> {
                     val action = AllSongsDirections.actionGlobalCurrentArtist(cm.artistsList[song.artistId]!!)
@@ -313,8 +330,12 @@ class MainActivity : AppCompatActivity(), MainActivityCurrentSongBarCallback, Al
             R.id.song_list_popup_add_queue -> {
                 musicService?.addToQueue(song.id)
             }
+            R.id.song_list_pop_add_playlist -> {
+                val action = AllAlbumsDirections.actionGlobalNewPlaylist(song)
+                navController.navigate(action)
+            }
             R.id.song_list_popup_artist -> {
-                val action = AllSongsDirections.actionGlobalCurrentArtist(cm.artistsList[song.artistId]!!)
+                val action = AllAlbumsDirections.actionGlobalCurrentArtist(cm.artistsList[song.artistId]!!)
                 navController.navigate(action)
             }
         }

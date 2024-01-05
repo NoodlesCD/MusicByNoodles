@@ -14,7 +14,7 @@ import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
 
 class AllAlbumsAdapter(
-    private val albumsList: ArrayList<Album>,
+    private val albumsList: List<Album>,
     private val fragment: Fragment
 ) : RecyclerView.Adapter<AllAlbumsAdapter.ViewHolder>() {
     /**
@@ -59,7 +59,7 @@ class AllAlbumsAdapter(
      * This method fetches appropriate data and uses it to fill in the layout.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.albumName.text = albumsList[position].albumTitle
+        holder.albumName.text = albumsList[position].title
         holder.artistName.text = albumsList[position].artist
         holder.row.setOnClickListener {
             val action = AllAlbumsDirections.actionAllAlbumsToCurrentAlbum(albumsList[position])
@@ -69,6 +69,8 @@ class AllAlbumsAdapter(
         Glide.with(fragment)
             .load(albumsList[position].albumUri)
             .placeholder(R.drawable.image)
+            .error(R.drawable.image)
+            .fallback(R.drawable.image)
             .into(holder.image)
     }
 }

@@ -5,39 +5,41 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Playlist
 import com.csdurnan.music.utils.PlaylistDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
- * Use the [all_playlists.newInstance] factory method to
+ * Use the [NewPlaylist.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AllPlaylists : Fragment() {
+class NewPlaylist : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =  inflater.inflate(R.layout.fragment_all_playlists, container, false)
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_new_playlist, container, false)
+        val args: NewPlaylistArgs by navArgs()
 
-        val playlists: List<Playlist> = listOf()
         val db = PlaylistDatabase.getInstance(requireContext()).dao
+        val playlists: List<Playlist> = listOf()
 
-        val allPlaylistsRecyclerView = view.findViewById<RecyclerView>(R.id.rv_all_playlists_list)
-        val adapter = AllPlaylistsAdapter(playlists, this)
-        allPlaylistsRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        allPlaylistsRecyclerView.setHasFixedSize(true)
-        allPlaylistsRecyclerView.adapter = adapter
+        val playlistsRecyclerView = view.findViewById<RecyclerView>(R.id.rv_new_playlist_list)
+        val adapter = NewPlaylistAdapter(args.song, playlists, this)
+
+        playlistsRecyclerView.setHasFixedSize(true)
+        playlistsRecyclerView.layoutManager = LinearLayoutManager(view.context)
+        playlistsRecyclerView.adapter = adapter
 
         db.getPlaylists().observe(viewLifecycleOwner) { playlistData ->
             adapter.setList(playlistData)
@@ -45,4 +47,5 @@ class AllPlaylists : Fragment() {
 
         return view
     }
+
 }

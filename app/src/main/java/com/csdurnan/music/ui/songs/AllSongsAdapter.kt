@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.SectionIndexer
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -16,7 +17,12 @@ import com.bumptech.glide.Glide
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Song
 
-class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fragment, private val onSongsItemClickListener: OnSongsItemClickListener) : RecyclerView.Adapter<AllSongsAdapter.AllSongsViewHolder>() {
+
+class AllSongsAdapter(
+    private val songList: List<Song>,
+    private val fragment: Fragment,
+    private val onSongsItemClickListener: OnSongsItemClickListener
+) : RecyclerView.Adapter<AllSongsAdapter.AllSongsViewHolder>(), SectionIndexer {
     /**
      * Provides a reference to the type of views that we will be using.
      */
@@ -34,46 +40,13 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
             image = view.findViewById(R.id.iv_all_songs_row_image)
             row = view.findViewById(R.id.cl_all_songs_list_row)
             popupMenuButton = view.findViewById(R.id.ib_songs_all_list_button)
-            popupMenu = PopupMenu(view.context, view)
+            popupMenu = PopupMenu(view.context, popupMenuButton)
             popupMenu.inflate(R.menu.song_list_popup)
 
             popupMenuButton.setOnClickListener {
                 popupMenu.gravity = Gravity.END
                 popupMenu.show()
             }
-        }
-
-        fun bind(song: Song) {
-            songName.text = song.title
-            artistName.text = song.artist
-
-            row.setOnClickListener {
-                val action = AllSongsDirections.actionGlobalCurrentSong(song.id)
-                it.findNavController().navigate(action)
-            }
-
-            popupMenu.setOnMenuItemClickListener {item ->
-                when (item.itemId) {
-                    R.id.song_list_popup_add_queue -> {
-                        onSongsItemClickListener?.onSongItemClick(item.itemId, song)
-                        true
-                    }
-                    R.id.song_list_popup_artist -> {
-                        onSongsItemClickListener?.onSongItemClick(item.itemId, song)
-                        true
-                    }
-                    R.id.song_list_popup_album -> {
-                        onSongsItemClickListener?.onSongItemClick(item.itemId, song)
-                        true
-                    }
-                    else -> false
-                }
-            }
-
-//            Glide.with(view)
-//                .load(songList[position].imageUri)
-//                .placeholder(R.drawable.image)
-//                .into(holder.image)
         }
     }
 
@@ -108,9 +81,13 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
             it.findNavController().navigate(action)
         }
 
-        holder.popupMenu.setOnMenuItemClickListener {item ->
+        holder.popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.song_list_popup_add_queue -> {
+                    onSongsItemClickListener.onSongItemClick(item.itemId, songList[position])
+                    true
+                }
+                R.id.song_list_pop_add_playlist -> {
                     onSongsItemClickListener.onSongItemClick(item.itemId, songList[position])
                     true
                 }
@@ -135,4 +112,30 @@ class AllSongsAdapter(private val songList: List<Song>, private val fragment: Fr
     interface OnSongsItemClickListener {
         fun onSongItemClick(position: Int, song: Song)
     }
+
+    lateinit var mSectionPositions: ArrayList<Int>
+
+    override fun getSections(): Array<String> {
+        val sections: ArrayList<String> = arrayListOf()
+        mSectionPositions = arrayListOf()
+
+        for (i in songList.indices) {
+            val section: String = songList[i].title[0].uppercase()
+            if (!sections.contains(section)) {
+                sections.add(section)
+                mSectionPositions.add(i)
+            }
+        }
+        return sections.toTypedArray<String>()
+    }
+
+    override fun getPositionForSection(sectionIndex: Int): Int {
+        return mSectionPositions[sectionIndex]
+    }
+
+    override fun getSectionForPosition(position: Int): Int {
+        return 0
+    }
+
+
 }

@@ -72,7 +72,7 @@ class ContentManagement(contentResolver: ContentResolver) {
 
                                 // Check if album exists
                                 for (i in artistsList.getValue(artistId).albums.indices) {
-                                    if (artistsList.getValue(artistId).albums[i].albumTitle == album) {
+                                    if (artistsList.getValue(artistId).albums[i].title == album) {
                                         artistsList.getValue(artistId).albums[i].songs.add(newSong)
                                         existingAlbum = true
                                         break
@@ -104,9 +104,9 @@ class ContentManagement(contentResolver: ContentResolver) {
         }
     }
 
-    val artists = ArrayList<Artist>(artistsList.values)
-    val albums = ArrayList<Album>(albumsList.values)
-    private val songs = ArrayList<Song>(songsList).sortedBy { it.title }
+    val artists = ArrayList<Artist>(artistsList.values).sortedBy { it.name }
+    val albums = ArrayList<Album>(albumsList.values).sortedBy { it.title }
+    val songs = ArrayList<Song>(songsList).sortedBy { it.title }
 
     fun allSongsPagingSource(): AllSongsPagingSource {
         return AllSongsPagingSource(songs)
