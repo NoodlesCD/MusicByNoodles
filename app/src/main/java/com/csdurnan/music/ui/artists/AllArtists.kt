@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csdurnan.music.utils.ContentManagement
 import com.csdurnan.music.R
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 
 /**
  * A simple [Fragment] subclass.

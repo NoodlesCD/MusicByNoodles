@@ -12,4 +12,5 @@
     <color name="separator">#202020</color>
     <color name="background">#0E0E0E</color>
     <color name="background_dark">#090909</color>
+    <color name="dialog_bg">#E60E0E0E</color>
 </resources>

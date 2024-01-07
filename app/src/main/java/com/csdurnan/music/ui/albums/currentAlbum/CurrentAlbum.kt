@@ -15,10 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 
 /**
  * A simple [Fragment] subclass.
- * Created when a user views an Album.
+ * Created when a user wishes to view a specific album.
  */
 @RequiresApi(Build.VERSION_CODES.Q)
 class CurrentAlbum : Fragment() {
@@ -50,6 +52,15 @@ class CurrentAlbum : Fragment() {
         currentAlbumRecyclerView.adapter = parentFragment?.context?.let {
             CurrentAlbumAdapter(args.selectedAlbum, onAlbumItemClickListener, this)
         }
+
+        val decorView = activity?.window?.decorView
+        val rootView = decorView?.findViewById(R.id.nav_host_fragment) as ViewGroup
+        val windowBackground = decorView.background
+
+        val blurView = view.findViewById<BlurView>(R.id.bv_current_album)
+        blurView.setupWith(rootView, RenderScriptBlur(requireContext()))
+            .setFrameClearDrawable(windowBackground)
+            .setBlurRadius(3f)
 
         return view
     }

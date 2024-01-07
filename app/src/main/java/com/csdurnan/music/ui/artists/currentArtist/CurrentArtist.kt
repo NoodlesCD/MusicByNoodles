@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.utils.ContentManagement
 import com.csdurnan.music.R
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 
 /**
  * A simple [Fragment] subclass.
@@ -23,10 +25,6 @@ import com.csdurnan.music.R
  * create an instance of this fragment.
  */
 class CurrentArtist : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,25 +52,15 @@ class CurrentArtist : Fragment() {
         currentArtistAlbumRecycler.setHasFixedSize(true)
         currentArtistAlbumRecycler.adapter = parentFragment?.context?.let { CurrentArtistAdapter(args.selectedArtist.albums, this) }
 
+        val decorView = activity?.window?.decorView
+        val rootView = decorView?.findViewById(R.id.nav_host_fragment) as ViewGroup
+        val windowBackground = decorView.background
 
+        val blurView = view.findViewById<BlurView>(R.id.bv_current_artist)
+        blurView.setupWith(rootView, RenderScriptBlur(requireContext()))
+            .setFrameClearDrawable(windowBackground)
+            .setBlurRadius(3f)
 
         return view
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CurrentAlbum.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CurrentArtist().apply {
-
-            }
     }
 }

@@ -15,6 +15,8 @@ import com.csdurnan.music.R
 import com.csdurnan.music.dc.PlaylistSongCrossRef
 import com.csdurnan.music.dc.Song
 import com.csdurnan.music.utils.database.PlaylistDatabase
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 
 /**
  * A simple [Fragment] subclass.
@@ -54,6 +56,15 @@ class CurrentPlaylist : Fragment(), CurrentPlaylistAdapter.DeletePlaylistSong {
         db.getSongsFromPlaylist(args.id).observe(viewLifecycleOwner) { playlistData ->
             adapter.setList(playlistData.songs)
         }
+
+        val decorView = activity?.window?.decorView
+        val rootView = decorView?.findViewById(R.id.nav_host_fragment) as ViewGroup
+        val windowBackground = decorView.background
+
+        val blurView = view.findViewById<BlurView>(R.id.bv_current_playlist)
+        blurView.setupWith(rootView, RenderScriptBlur(requireContext()))
+            .setFrameClearDrawable(windowBackground)
+            .setBlurRadius(3f)
 
         return view
     }

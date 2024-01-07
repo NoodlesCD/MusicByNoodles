@@ -15,6 +15,7 @@ import android.os.PowerManager
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.csdurnan.music.dc.PlaybackStatus
 import com.csdurnan.music.dc.Song
 import java.util.LinkedList
 import java.util.Queue
@@ -37,16 +38,14 @@ class MusicService :
         when (focusState) {
             /** The application is now the sole source of audio the user is listening to. */
             AudioManager.AUDIOFOCUS_GAIN -> {
-                if (!isPaused()) {
-                    mediaPlayer.start()
-                }
+                mediaPlayer.start()
                 mediaPlayer.setVolume(1.0F, 1.0F)
+                playbackStatus = PlaybackStatus.PLAYING
             }
 
             /** Lost audio focus for an indefinite amount of time. */
             AudioManager.AUDIOFOCUS_LOSS -> {
-                mediaPlayer.stop()
-                mediaPlayer.release()
+                stop()
             }
 
             /**
@@ -54,6 +53,7 @@ class MusicService :
              * Most likely due to alarm or call. */
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
                 mediaPlayer.pause()
+                playbackStatus = PlaybackStatus.PAUSED
             }
 
             /** Lost focus for a short time but can play at a lower volume. */
@@ -83,7 +83,8 @@ class MusicService :
     private var songPosition = 0L
     private var song: Song? = null
     private var songQueue: Queue<Long> = LinkedList()
-    private var isPaused: Boolean = false
+    var playbackStatus = PlaybackStatus.STOPPED
+    //private var isPaused: Boolean = false
 
     private val musicBinder: IBinder = MusicBinder(this)
 
@@ -91,6 +92,7 @@ class MusicService :
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onUnbind(intent: Intent?): Boolean {
+        playbackStatus = PlaybackStatus.STOPPED
         mediaPlayer.stop()
         mediaPlayer.release()
         audioManager.abandonAudioFocus(this)
@@ -101,6 +103,7 @@ class MusicService :
     override fun onPrepared(p0: MediaPlayer?) {
         if (requestAudioFocus()) {
             mediaPlayer.start()
+            playbackStatus = PlaybackStatus.PLAYING
             Log.i("MusicService.kt", "Audio focus granted.")
         } else {
             Log.e("MusicService.kt", "Unable to request audio focus.")
@@ -109,25 +112,22 @@ class MusicService :
 
     override fun onCreate() {
         super.onCreate()
-
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         mediaPlayer = MediaPlayer()
         initializeMusicPlayer()
     }
 
     private fun initializeMusicPlayer() {
-        // MediaPlayer will remain active while screen is turned off.
-        mediaPlayer.setWakeMode(
-            applicationContext,
-            PowerManager.PARTIAL_WAKE_LOCK
-        )
-
         val audioAttributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
             .setUsage(AudioAttributes.USAGE_MEDIA)
             .build()
-        mediaPlayer.setAudioAttributes(audioAttributes)
 
+        mediaPlayer.setWakeMode(
+            applicationContext,
+            PowerManager.PARTIAL_WAKE_LOCK
+        )
+        mediaPlayer.setAudioAttributes(audioAttributes)
         mediaPlayer.setOnPreparedListener(this)
         mediaPlayer.setOnCompletionListener(this)
         mediaPlayer.setOnErrorListener(this)
@@ -154,30 +154,30 @@ class MusicService :
         try {
             mediaPlayer.reset()
             mediaPlayer.setDataSource(applicationContext, songUri)
+            mediaPlayer.prepare()
+            playbackStatus = PlaybackStatus.PLAYING
         } catch (ex: Exception) {
             Log.e("MusicService.kt", "Error setting data source")
         }
-
-        mediaPlayer.prepare()
-        isPaused = false
     }
 
     fun pauseSong() {
-        if (mediaPlayer.isPlaying) {
+        if (playbackStatus == PlaybackStatus.PLAYING) {
             mediaPlayer.pause()
-            isPaused = true
+            playbackStatus = PlaybackStatus.PAUSED
         }
     }
 
     fun resumeSong() {
-        if (!mediaPlayer.isPlaying) {
+        if (playbackStatus == PlaybackStatus.PAUSED) {
             mediaPlayer.start()
+            playbackStatus = PlaybackStatus.PLAYING
         }
     }
 
     fun previousSong() {
         songPosition--
-        mediaPlayer.stop()
+        //mediaPlayer.stop()
         playSong()
         sendBroadcast(Intent("UPDATE_UI"))
     }
@@ -185,28 +185,32 @@ class MusicService :
     fun nextSong() {
         if (songQueue.isNotEmpty()) {
             songPosition = songQueue.remove()
-            mediaPlayer.stop()
+            //mediaPlayer.stop()
             playSong()
         } else if (songsMap[songPosition++] != null){
             songPosition++
-            mediaPlayer.stop()
+            //mediaPlayer.stop()
             playSong()
         }
         sendBroadcast(Intent("UPDATE_UI"))
     }
 
-    fun seekTo(progress: Int) = mediaPlayer.seekTo(progress)
+    fun stop() {
+        mediaPlayer.stop()
+        mediaPlayer.release()
+        audioManager.abandonAudioFocus(this)
+        playbackStatus = PlaybackStatus.STOPPED
+    }
+
+    fun seekTo(progress: Int) {
+        if (playbackStatus != PlaybackStatus.STOPPED) mediaPlayer.seekTo(progress)
+    }
 
     fun songInfo(): Song? = songsMap[songPosition]
-
-    fun isPlaying(): Boolean = mediaPlayer.isPlaying
-
-    fun isPaused(): Boolean = isPaused
 
     fun currentPosition(): Int = mediaPlayer.currentPosition
 
     fun addToQueue(songIndex: Long) = songQueue.add(songIndex)
-
 
     override fun onError(p0: MediaPlayer?, p1: Int, p2: Int): Boolean {
         return false
@@ -216,7 +220,7 @@ class MusicService :
         if (songsMap[songPosition++] != null) {
             nextSong()
         } else {
-            mediaPlayer.stop()
+            stop()
         }
     }
 

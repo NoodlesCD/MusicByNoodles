@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import com.csdurnan.music.dc.Album
 import com.csdurnan.music.dc.Artist
 import com.csdurnan.music.dc.Song
-import com.csdurnan.music.ui.songs.AllSongsPagingSource
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -107,9 +106,4 @@ class ContentManagement(contentResolver: ContentResolver) {
     val artists = ArrayList<Artist>(artistsList.values).sortedBy { it.name }
     val albums = ArrayList<Album>(albumsList.values).sortedBy { it.title }
     val songs = ArrayList<Song>(songsList).sortedBy { it.title }
-
-    fun allSongsPagingSource(): AllSongsPagingSource {
-        return AllSongsPagingSource(songs)
-    }
-
 }

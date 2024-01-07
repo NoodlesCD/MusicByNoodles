@@ -2,11 +2,14 @@ package com.csdurnan.music.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -15,9 +18,11 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -28,15 +33,16 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.csdurnan.music.utils.ContentManagement
 import com.csdurnan.music.MainNavDirections
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Album
+import com.csdurnan.music.dc.PlaybackStatus
 import com.csdurnan.music.dc.Song
 import com.csdurnan.music.ui.albums.AllAlbumsAdapter
 import com.csdurnan.music.ui.albums.AllAlbumsDirections
 import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumAdapter
+import com.csdurnan.music.ui.albums.currentAlbum.CurrentAlbumDirections
 import com.csdurnan.music.ui.songs.AllSongsAdapter
 import com.csdurnan.music.ui.songs.AllSongsDirections
 import com.csdurnan.music.ui.songs.currentSong.SongSelectorViewModel
@@ -47,7 +53,11 @@ import com.csdurnan.music.utils.musicService.UpdateUiBroadcastReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
-import jp.wasabeef.glide.transformations.BlurTransformation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class MainActivity :
     AppCompatActivity(),
@@ -80,7 +90,7 @@ class MainActivity :
     /** Updates the musicService with the selected song. */
     private val viewModel: SongSelectorViewModel by viewModels()
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun songPicked(song: Int) {
         musicService!!.setSong(song.toLong())
         musicService!!.playSong()
@@ -88,7 +98,7 @@ class MainActivity :
     }
 
     /** Updates the UI whenever a new song is played.. */
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onAction() {
         updateCurrentSongBarUi()
     }
@@ -109,13 +119,13 @@ class MainActivity :
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            // Permission is granted
-            // Perform the operation that requires this permission
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             if (playIntent == null) {
                 playIntent = Intent(this, MusicService::class.java)
                 bindService(playIntent!!, musicConnection, BIND_AUTO_CREATE)
@@ -124,7 +134,10 @@ class MainActivity :
             Log.i("MainActivity.kt", "Android permissions granted.")
         } else {
             // Permission is not granted, request it
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                1)
             finish()
             startActivity(intent)
             Log.i("MainActivity.kt", "Android permissions not granted.")
@@ -167,7 +180,6 @@ class MainActivity :
                     true
                 }
                 else -> false
-
             }
         }
 
@@ -179,8 +191,50 @@ class MainActivity :
             } else {
                 songBarVisibility(View.VISIBLE)
                 findViewById<ImageView>(R.id.current_song).visibility = View.GONE
-                //Handler(Looper.getMainLooper()).post(currentPositionTimer)
+                Handler(Looper.getMainLooper()).post(currentPositionTimer)
             }
+
+            when (destination.id) {
+                R.id.songs -> setMenuHeader(R.string.songs, View.VISIBLE)
+                R.id.albums -> setMenuHeader(R.string.albums, View.VISIBLE)
+                R.id.artists -> setMenuHeader(R.string.artists, View.VISIBLE)
+                R.id.playlists -> setMenuHeader(R.string.playlists, View.VISIBLE)
+                else -> setMenuHeader(null, View.GONE)
+            }
+        }
+
+        val sleep = findViewById<ImageView>(R.id.iv_sleep_button)
+        sleep.setOnClickListener {
+            val builder = AlertDialog.Builder(this, R.style.WrapContentDialog)
+            val dialogView = this.layoutInflater.inflate(R.layout.dialog_sleep, null)
+            val dialog = builder.setView(dialogView).create()
+            dialogView.findViewById<TextView>(R.id.tv_sleep_dismiss).setOnClickListener {
+                dialog.dismiss()
+            }
+            dialogView.findViewById<TextView>(R.id.tv_sleep_confirm).setOnClickListener {
+                val sleepTimeInput = dialogView.findViewById<EditText>(R.id.et_sleep_timer)
+
+                if (sleepTimeInput.text.isNotBlank()) {
+                    Toast.makeText(this,"Timer set for ${sleepTimeInput.text} minutes", Toast.LENGTH_SHORT).show()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(TimeUnit.MINUTES.toMillis(sleepTimeInput.text.toString().toLong()))
+                        musicService?.stop()
+                    }
+
+                    dialog.dismiss()
+                }
+            }
+
+            val decorView = window.decorView
+            val rootView = decorView.findViewById(R.id.nav_host_fragment) as ViewGroup
+            val windowBackground = decorView.background
+
+            val dialogBlurView = dialogView.findViewById<BlurView>(R.id.dialog_sleep_timer)
+            dialogBlurView.setupWith(rootView, RenderScriptBlur(this))
+                .setFrameClearDrawable(windowBackground)
+                .setBlurRadius(3f)
+
+            dialog.show()
         }
 
         /** Sets up navigation from the currentSongBar to the CurrentSong fragment. */
@@ -196,7 +250,7 @@ class MainActivity :
 
         val playPauseButton = findViewById<ImageView>(R.id.iv_current_song_play_pause)
         playPauseButton.setOnClickListener {
-            if (musicService?.isPlaying() == true) {
+            if (musicService?.playbackStatus == PlaybackStatus.PLAYING) {
                 musicService?.pauseSong()
                 playPauseButton?.setImageDrawable(
                     ResourcesCompat.getDrawable(
@@ -221,12 +275,15 @@ class MainActivity :
         val rootView = decorView.findViewById(R.id.nav_host_fragment) as ViewGroup
         val windowBackground = decorView.background
 
-        val blurView = findViewById<BlurView>(R.id.linearLayout3)
-        blurView.setupWith(rootView, RenderScriptBlur(this))
+        val currentSongBarBlurView = findViewById<BlurView>(R.id.linearLayout3)
+        currentSongBarBlurView.setupWith(rootView, RenderScriptBlur(this))
             .setFrameClearDrawable(windowBackground)
             .setBlurRadius(3f)
 
-
+        val headerBlurView = findViewById<BlurView>(R.id.header_bar)
+        headerBlurView.setupWith(rootView, RenderScriptBlur(this))
+            .setFrameClearDrawable(windowBackground)
+            .setBlurRadius(3f)
     }
 
 
@@ -234,7 +291,7 @@ class MainActivity :
      * Updates the UI information on the currentSongBar.
      * currentSongBar displays information about the currently playing song.
      */
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.S)
     fun updateCurrentSongBarUi() {
         val currentSong = musicService!!.songInfo()
 
@@ -243,9 +300,14 @@ class MainActivity :
             Glide.with(this)
                 .load(musicService?.songInfo()?.imageUri)
                 .placeholder(R.drawable.artwork_placeholder)
-                .apply(RequestOptions.bitmapTransform(BlurTransformation(25,3)))
                 .into(background)
         }
+
+        background.setRenderEffect(
+            RenderEffect.createBlurEffect(
+                50.0f, 50.0f, Shader.TileMode.CLAMP
+            )
+        )
 
 //        val currentSongBackground = findViewById<ImageView>(R.id.current_song_bar_bg)
 //        if (background != null) {
@@ -277,13 +339,20 @@ class MainActivity :
      */
     private fun songBarVisibility(visibility: Int) {
         val currentSongBar = findViewById<ConstraintLayout>(R.id.cl_current_song_bar)
-        if (musicService != null && musicBound == true) {
-            if (visibility == View.VISIBLE && (musicService?.isPlaying() == true || musicService?.isPaused() == true)) {
+        if (musicService != null && musicBound) {
+            if (visibility == View.VISIBLE && (musicService?.playbackStatus != PlaybackStatus.STOPPED)) {
                 currentSongBar.visibility = View.VISIBLE
             } else if (visibility == View.GONE) {
                 currentSongBar.visibility = visibility
             }
         }
+    }
+
+    private fun setMenuHeader(stringId: Int?, visibility: Int) {
+        if (stringId != null) {
+            findViewById<TextView>(R.id.tv_header).text = getString(stringId)
+        }
+        findViewById<BlurView>(R.id.header_bar).visibility = visibility
     }
 
     /** Updates the currentSongBar every second with the current position of the song */
@@ -292,13 +361,13 @@ class MainActivity :
             runOnUiThread {
                 if (musicBound) {
                     if (musicService != null) {
-                        if (musicService?.isPlaying() == true) {
+                        if (musicService?.playbackStatus == PlaybackStatus.PLAYING) {
                             val bar = findViewById<ProgressBar>(R.id.pb_current_song_progress)
                             bar?.max = musicService?.songInfo()?.duration!!
                             bar?.progress = musicService?.currentPosition()!!
                         }
                     }
-                    }
+                }
             }
             Handler(Looper.getMainLooper()).postDelayed(this, 1000)
         }
@@ -335,6 +404,11 @@ class MainActivity :
             }
         }
 
+    /**
+     * Implements the function within [CurrentAlbumAdapter.OnAlbumItemClickListener]
+     * Used within the CurrentAlbum fragment.
+     * Provides functionality for an additional action list for each song.
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onAlbumItemClick(position: Int, song: Song) {
         val navHostFragment =
@@ -347,16 +421,21 @@ class MainActivity :
                 musicService?.addToQueue(song.id)
             }
             R.id.song_list_pop_add_playlist -> {
-                val action = AllAlbumsDirections.actionGlobalNewPlaylist(arrayOf(song))
+                val action = CurrentAlbumDirections.actionGlobalNewPlaylist(arrayOf(song))
                 navController.navigate(action)
             }
             R.id.song_list_popup_artist -> {
-                val action = AllAlbumsDirections.actionGlobalCurrentArtist(cm.artistsList[song.artistId]!!)
+                val action = CurrentAlbumDirections.actionGlobalCurrentArtist(cm.artistsList[song.artistId]!!)
                 navController.navigate(action)
             }
         }
     }
 
+    /**
+     * Implements the function within [AllAlbumsAdapter.OnAllAlbumsItemClickListener]
+     * Used within the AllAlbums fragment.
+     * Provides functionality for an additional action list for each album.
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onAllAlbumsItemClick(position: Int, album: Album) {
         val navHostFragment =

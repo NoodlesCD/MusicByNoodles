@@ -18,27 +18,11 @@
         android:scrollbars="vertical"/>
 
     <View
-        android:id="@+id/v_top_shadow"
+        android:id="@+id/header_shadow"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:visibility="visible"
         android:background="@drawable/background_gradient"
         android:rotation="180"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/v_top_shadow"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:fontFamily="@font/noto_sans"
-        android:includeFontPadding="false"
-        android:text="@string/artists"
-        android:shadowColor="@color/black"
-        android:shadowRadius="15"
-        android:textColor="@color/list_font_large"
-        android:textSize="22sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

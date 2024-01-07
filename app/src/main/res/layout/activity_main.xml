@@ -7,6 +7,77 @@
     tools:context=".activities.MainActivity"
     android:background="#0E0E0E">
 
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/header_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/background_header"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:fontFamily="@font/noto_sans"
+                android:includeFontPadding="false"
+                android:paddingLeft="20dp"
+                android:text="@string/songs"
+                android:shadowColor="@color/black"
+                android:shadowRadius="15"
+                android:textColor="@color/list_font_large"
+                android:textSize="20sp"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#0E0E0E"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="20dp"/>
+
+            <ImageView
+                android:id="@+id/iv_sleep_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/controls_sleep"
+                tools:layout_editor_absoluteX="305dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_settings_button"
+                android:layout_marginRight="20dp"/>
+
+            <ImageView
+                android:id="@+id/iv_settings_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/controls_settings"
+                tools:layout_editor_absoluteX="305dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginRight="20dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </eightbitlab.com.blurview.BlurView>
+
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,13 +105,12 @@
         android:id="@+id/cl_current_song_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_marginBottom="5dp"
 
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
 
 
         <eightbitlab.com.blurview.BlurView
@@ -131,8 +201,10 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/controls_pause"
+                android:scaleType="center"
                 android:layout_gravity="end"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="-10dp"/>
 
         </eightbitlab.com.blurview.BlurView>
 

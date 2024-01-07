@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.csdurnan.music.R
 import com.csdurnan.music.dc.Playlist
 import com.csdurnan.music.utils.database.PlaylistDatabase
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 
 /**
  * A simple [Fragment] subclass.

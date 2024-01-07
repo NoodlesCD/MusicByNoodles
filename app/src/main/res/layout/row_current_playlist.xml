@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_current_playlist_list_row"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:layout_height="65dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_current_playlist_row_image"
@@ -36,7 +36,7 @@
             android:includeFontPadding="false"
             android:text="TextView"
             android:textColor="@color/list_font_large"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:ellipsize="end"
             android:maxLines="1" />
 
@@ -47,7 +47,7 @@
             android:fontFamily="@font/noto_sans"
             android:text="TextView"
             android:textColor="@color/list_font_small"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:ellipsize="end"
             android:maxLines="1"/>
 

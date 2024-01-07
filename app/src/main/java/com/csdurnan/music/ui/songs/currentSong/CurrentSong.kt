@@ -22,6 +22,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
+import com.csdurnan.music.dc.PlaybackStatus
 import com.csdurnan.music.utils.musicService.MusicBinder
 import com.csdurnan.music.utils.musicService.MusicService
 import com.csdurnan.music.utils.musicService.UpdateUiBroadcastReceiver
@@ -68,14 +69,15 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
         override fun run() {
             activity?.runOnUiThread {
                 if (serviceBound) {
-                    var bar = view?.findViewById<SeekBar>(R.id.sbSongPositionBar)
-                    bar?.progress = musicService.currentPosition()
+                    if (musicService.playbackStatus == PlaybackStatus.PLAYING) {
+                        var bar = view?.findViewById<SeekBar>(R.id.sbSongPositionBar)
+                        bar?.progress = musicService.currentPosition()
 
-                    val currentTime = view?.findViewById<TextView>(R.id.tvSongCurrentTime)
-                    currentTime?.text = timeLabel(musicService.currentPosition())
+                        val currentTime = view?.findViewById<TextView>(R.id.tvSongCurrentTime)
+                        currentTime?.text = timeLabel(musicService.currentPosition())
+                    }
                 }
             }
-
             handler.postDelayed(this, 1000)
         }
     }
@@ -121,7 +123,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
             )
         )
         pauseButton.setOnClickListener {
-            if (musicService.isPlaying()) {
+            if (musicService.playbackStatus == PlaybackStatus.PLAYING) {
                 musicService.pauseSong()
                 pauseButton.setImageDrawable(
                     ResourcesCompat.getDrawable(
@@ -130,7 +132,7 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
                         null
                     )
                 )
-            } else {
+            } else if (musicService.playbackStatus == PlaybackStatus.PAUSED) {
                 musicService.resumeSong()
                 pauseButton.setImageDrawable(
                     ResourcesCompat.getDrawable(
@@ -175,10 +177,12 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
                 fromUser: Boolean
             ) {
                 if (fromUser) {
-                    musicService.seekTo(progress)
-                    activity?.runOnUiThread {
-                        val currentTime = view.findViewById<TextView>(R.id.tvSongCurrentTime)
-                        currentTime?.text = timeLabel(progress)
+                    if (musicService.playbackStatus != PlaybackStatus.STOPPED) {
+                        musicService.seekTo(progress)
+                        activity?.runOnUiThread {
+                            val currentTime = view.findViewById<TextView>(R.id.tvSongCurrentTime)
+                            currentTime?.text = timeLabel(progress)
+                        }
                     }
                 }
             }
@@ -198,12 +202,12 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
     /** Updates the UI components based on the current song. */
     @RequiresApi(Build.VERSION_CODES.Q)
     fun updateUi() {
-        val currentSong = musicService.songInfo()
+            val currentSong = musicService.songInfo()
 
-        view?.findViewById<TextView>(R.id.tvSongTitle)?.text = currentSong?.title
-        view?.findViewById<TextView>(R.id.tvArtistTitle)?.text = currentSong?.artist
-        view?.findViewById<SeekBar>(R.id.sbSongPositionBar)?.max = currentSong?.duration!!
-        view?.findViewById<TextView>(R.id.tvSongTotalTime)?.text = timeLabel(currentSong.duration)
+            view?.findViewById<TextView>(R.id.tvSongTitle)?.text = currentSong?.title
+            view?.findViewById<TextView>(R.id.tvArtistTitle)?.text = currentSong?.artist
+            view?.findViewById<SeekBar>(R.id.sbSongPositionBar)?.max = currentSong?.duration ?: 0
+            view?.findViewById<TextView>(R.id.tvSongTotalTime)?.text = timeLabel(currentSong?.duration ?: 0)
 
 //        val trackUri = currentSong.uri
 //        val cr = context?.contentResolver
@@ -213,14 +217,15 @@ class CurrentSong : Fragment(), CurrentSongChangeCallback {
 //            bm = trackUri.let { cr.loadThumbnail(it, Size(2048, 2048), null) }
 //        }
 
-        val image = view?.findViewById<ImageView>(R.id.ivSongImageView)
+            val image = view?.findViewById<ImageView>(R.id.ivSongImageView)
 
-        if (image != null) {
-            Glide.with(this)
-                .load(currentSong.imageUri)
-                .placeholder(R.drawable.artwork_placeholder)
-                .into(image)
-        }
+            if (image != null) {
+                Glide.with(this)
+                    .load(currentSong?.imageUri)
+                    .placeholder(R.drawable.artwork_placeholder)
+                    .into(image)
+            }
+
     }
 
     /** Generates a time label of mm:ss */

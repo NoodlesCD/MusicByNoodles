@@ -32,55 +32,81 @@
             android:rotation="180"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/ll_playlist_top_container"
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/bv_current_playlist"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="1dp"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_margin="10dp"
+            android:layout_height="100dp"
+            android:background="@drawable/background_header"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:elevation="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_current_playlist_image"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/artwork_placeholder"
-                app:shapeAppearanceOverlay="@style/roundedImageView"/>
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="20dp">
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/tv_current_playlist_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:fontFamily="@font/noto_sans"
-                    android:includeFontPadding="false"
-                    android:text="TextView"
-                    android:textColor="@color/list_font_large"
-                    android:textSize="20sp" />
+                <LinearLayout
+                    android:id="@+id/ll_playlist_top_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:orientation="horizontal"
+                    tools:layout_editor_absoluteX="1dp"
+                    tools:layout_editor_absoluteY="1dp"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_margin="10dp"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/tv_current_playlist_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView"
-                    android:textColor="@color/list_font_small"
-                    android:textSize="14sp" />
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_current_playlist_image"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/artwork_placeholder"
+                        app:shapeAppearanceOverlay="@style/roundedImageView"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
+
+                        <TextView
+                            android:id="@+id/tv_current_playlist_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:fontFamily="@font/noto_sans"
+                            android:includeFontPadding="false"
+                            android:text="TextView"
+                            android:textColor="@color/list_font_large"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/tv_current_playlist_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textColor="@color/list_font_small"
+                            android:textSize="14sp" />
 
 
 
-            </LinearLayout>
-        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#0E0E0E"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:layout_editor_absoluteX="20dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </eightbitlab.com.blurview.BlurView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
