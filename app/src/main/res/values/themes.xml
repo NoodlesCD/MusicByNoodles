@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MyApplication" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.MusicNoodlesCD.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -10,9 +10,50 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">#0E0E0E</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">#000000</item>
+        <!-- Main Activity -->
+        <item name="main_background">#0E0E0E</item>
+        <item name="header_background">#33090909</item>
+        <item name="header_title">#E4E4E4</item>
+        <item name="current_song_background">@drawable/background_current_song_bar</item>
+        <item name="list_header">#E4E4E4</item>
+        <item name="list_description">#B3B3B3</item>
+        <item name="progress_tint">#E3D9D9</item>
+        <item name="navigation">#FFB3B3B3</item>
+        <item name="navigation_background">@drawable/navigation_background</item>
+        <item name="separator">#202020</item>
+        <item name="background_gradient">@drawable/background_gradient</item>
+        <item name="dialog_background">#E60E0E0E</item>
     </style>
+    <!-- Base application theme. -->
+    <style name="Theme.MusicNoodlesCD.Light" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/list_font_large</item>
+        <item name="colorPrimaryVariant">@color/list_font_large</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/list_font_small</item>
+        <item name="colorSecondaryVariant">@color/list_font_small</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Main Activity -->
+        <item name="main_background">#FFFEFB</item>
+        <item name="header_background">#FFFFFF</item>
+        <item name="header_title">#0C0C0C</item>
+        <item name="current_song_background">@drawable/background_current_song_bar_light</item>
+        <item name="list_header">#0C0C0C</item>
+        <item name="list_description">#2C2C2C</item>
+        <item name="progress_tint">#E3D9D9</item>
+        <item name="navigation">#0C0C0C</item>
+        <item name="navigation_background">@drawable/navigation_background_light</item>
+        <item name="separator">#C5C5C5</item>
+        <item name="background_gradient">@drawable/background_gradient_light</item>
+        <item name="dialog_background">#FFFFFF</item>
+    </style>
+
+
     <style name="roundedImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">4dp</item>

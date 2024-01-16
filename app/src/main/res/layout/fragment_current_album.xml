@@ -28,7 +28,7 @@
             android:id="@+id/v_top_shadow"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:background="@drawable/background_gradient"
+            android:background="?attr/background_gradient"
             android:rotation="180"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +36,7 @@
             android:id="@+id/bv_current_album"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@drawable/background_header"
+            android:background="?attr/header_background"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:visibility="visible"
@@ -78,7 +78,7 @@
                         android:fontFamily="@font/noto_sans"
                         android:includeFontPadding="false"
                         android:text="TextView"
-                        android:textColor="@color/list_font_large"
+                        android:textColor="?attr/list_header"
                         android:textSize="20sp" />
 
                     <TextView
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="TextView"
-                        android:textColor="@color/list_font_small"
+                        android:textColor="?attr/list_description"
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -96,7 +96,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#0E0E0E"
+            android:background="?attr/main_background"
             app:layout_constraintTop_toBottomOf="@+id/bv_current_album"
             tools:layout_editor_absoluteX="20dp"/>
 

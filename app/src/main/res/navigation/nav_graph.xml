@@ -174,4 +174,10 @@
             android:name="playlist"
             app:argType="com.csdurnan.music.dc.Playlist" />
     </fragment>
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.csdurnan.music.ui.Settings"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <action android:id="@+id/action_global_settings" app:destination="@id/settings" />
 </navigation>

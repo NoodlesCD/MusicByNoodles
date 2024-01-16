@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="main_background" format="color" />
+    <attr name="header_background" format="color" />
+    <attr name="header_title" format="color" />
+    <attr name="list_header" format="color" />
+    <attr name="list_description" format="color" />
+    <attr name="current_song_background" format="string" />
+    <attr name="progress_tint" format="string" />
+    <attr name="navigation" format="color" />
+    <attr name="navigation_background" format="string" />
+    <attr name="background_gradient" format="string" />
+    <attr name="separator" format="color" />
+    <attr name="dialog_background" format="color" />
+</resources>

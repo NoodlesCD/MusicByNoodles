@@ -17,12 +17,23 @@
         android:clipToPadding="false"
         android:scrollbars="vertical"/>
 
+    <com.reddit.indicatorfastscroll.FastScrollerView
+        android:id="@+id/fs_all_artists"
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:fastScrollerTextPadding="9dp"
+        android:layout_marginBottom="70dp"
+        android:textColor="?attr/list_header"
+        />
+
     <View
         android:id="@+id/header_shadow"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:visibility="visible"
-        android:background="@drawable/background_gradient"
+        android:background="?attr/background_gradient"
         android:rotation="180"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
@@ -30,6 +31,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
@@ -58,6 +61,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity :
     AppCompatActivity(),
@@ -143,6 +155,20 @@ class MainActivity :
             Log.i("MainActivity.kt", "Android permissions not granted.")
         }
 
+        val lightMode = booleanPreferencesKey("light_mode")
+        val preferencesStore: Flow<Boolean> =
+            this.dataStore.data.map { preferences ->
+                preferences[lightMode] ?: false
+        }
+
+        runBlocking {
+            if (preferencesStore.firstOrNull() == true) {
+                setTheme(R.style.Theme_MusicNoodlesCD_Light)
+            } else {
+                setTheme(R.style.Theme_MusicNoodlesCD_Dark)
+            }
+        }
+
         setContentView(R.layout.activity_main)
 
         /** Observes for whenever a user selects a song. */
@@ -199,6 +225,7 @@ class MainActivity :
                 R.id.albums -> setMenuHeader(R.string.albums, View.VISIBLE)
                 R.id.artists -> setMenuHeader(R.string.artists, View.VISIBLE)
                 R.id.playlists -> setMenuHeader(R.string.playlists, View.VISIBLE)
+                R.id.settings -> setMenuHeader(R.string.settings, View.VISIBLE)
                 else -> setMenuHeader(null, View.GONE)
             }
         }
@@ -225,6 +252,8 @@ class MainActivity :
                 }
             }
 
+
+
             val decorView = window.decorView
             val rootView = decorView.findViewById(R.id.nav_host_fragment) as ViewGroup
             val windowBackground = decorView.background
@@ -235,6 +264,12 @@ class MainActivity :
                 .setBlurRadius(3f)
 
             dialog.show()
+        }
+
+        val settings = findViewById<ImageView>(R.id.iv_settings_button)
+        settings.setOnClickListener {
+            val action = MainNavDirections.actionGlobalSettings()
+            navController.navigate(action)
         }
 
         /** Sets up navigation from the currentSongBar to the CurrentSong fragment. */
@@ -275,7 +310,7 @@ class MainActivity :
         val rootView = decorView.findViewById(R.id.nav_host_fragment) as ViewGroup
         val windowBackground = decorView.background
 
-        val currentSongBarBlurView = findViewById<BlurView>(R.id.linearLayout3)
+        val currentSongBarBlurView = findViewById<BlurView>(R.id.bv_current_song_bar)
         currentSongBarBlurView.setupWith(rootView, RenderScriptBlur(this))
             .setFrameClearDrawable(windowBackground)
             .setBlurRadius(3f)
@@ -284,6 +319,8 @@ class MainActivity :
         headerBlurView.setupWith(rootView, RenderScriptBlur(this))
             .setFrameClearDrawable(windowBackground)
             .setBlurRadius(3f)
+
+        updateCurrentSongBarUi()
     }
 
 
@@ -293,43 +330,38 @@ class MainActivity :
      */
     @RequiresApi(Build.VERSION_CODES.S)
     fun updateCurrentSongBarUi() {
-        val currentSong = musicService!!.songInfo()
+        if (musicBound) {
+            if (musicService?.playbackStatus != PlaybackStatus.STOPPED) {
+                val currentSong = musicService!!.songInfo()
 
-        val background = findViewById<ImageView>(R.id.current_song)
-        if (background != null) {
-            Glide.with(this)
-                .load(musicService?.songInfo()?.imageUri)
-                .placeholder(R.drawable.artwork_placeholder)
-                .into(background)
-        }
+                val background = findViewById<ImageView>(R.id.current_song)
+                if (background != null) {
+                    Glide.with(this)
+                        .load(musicService?.songInfo()?.imageUri)
+                        .placeholder(R.drawable.artwork_placeholder)
+                        .into(background)
+                }
 
-        background.setRenderEffect(
-            RenderEffect.createBlurEffect(
-                50.0f, 50.0f, Shader.TileMode.CLAMP
-            )
-        )
+                background.setRenderEffect(
+                    RenderEffect.createBlurEffect(
+                        50.0f, 50.0f, Shader.TileMode.CLAMP
+                    )
+                )
 
-//        val currentSongBackground = findViewById<ImageView>(R.id.current_song_bar_bg)
-//        if (background != null) {
-//            Glide.with(this)
-//                .load(musicService?.songInfo()?.imageUri)
-//                .placeholder(R.drawable.artwork_placeholder)
-//                .apply(RequestOptions.bitmapTransform(BlurTransformation(25,3)))
-//                .into(background)
-//        }
+                val currentSongTitle = findViewById<TextView>(R.id.tv_current_song_title)
+                currentSongTitle.text = currentSong?.title
+                val currentSongArtist = findViewById<TextView>(R.id.tv_current_song_artist)
+                currentSongArtist.text = currentSong?.artist
 
-        val currentSongTitle = findViewById<TextView>(R.id.tv_current_song_title)
-        currentSongTitle.text = currentSong?.title
-        val currentSongArtist = findViewById<TextView>(R.id.tv_current_song_artist)
-        currentSongArtist.text = currentSong?.artist
+                val currentSongImg = findViewById<ImageView>(R.id.iv_current_song_image)
 
-        val currentSongImg = findViewById<ImageView>(R.id.iv_current_song_image)
-
-        if (currentSongImg != null) {
-            Glide.with(this)
-                .load(currentSong?.imageUri)
-                .placeholder(R.drawable.artwork_placeholder)
-                .into(currentSongImg)
+                if (currentSongImg != null) {
+                    Glide.with(this)
+                        .load(currentSong?.imageUri)
+                        .placeholder(R.drawable.artwork_placeholder)
+                        .into(currentSongImg)
+                }
+            }
         }
     }
 

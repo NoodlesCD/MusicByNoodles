@@ -20,7 +20,7 @@
         android:id="@+id/v_top_shadow"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/background_gradient"
+        android:background="?attr/background_gradient"
         android:rotation="180"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,6 +37,6 @@
         android:text="@string/playlists"
         android:shadowColor="@color/black"
         android:shadowRadius="15"
-        android:textColor="@color/list_font_large"
+        android:textColor="?attr/list_header"
         android:textSize="25sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

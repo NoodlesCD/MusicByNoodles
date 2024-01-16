@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csdurnan.music.utils.ContentManagement
 import com.csdurnan.music.R
+import com.csdurnan.music.ui.songs.AllSongsAdapter
+import com.reddit.indicatorfastscroll.FastScrollItemIndicator
+import com.reddit.indicatorfastscroll.FastScrollerView
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 
@@ -30,10 +33,40 @@ class AllArtists : Fragment() {
         val cm: ContentManagement = ContentManagement(resolver)
 
         var view = inflater.inflate(R.layout.fragment_all_artists, container, false)
+
         var allArtistRecyclerView = view.findViewById<RecyclerView>(R.id.rv_all_artists_list)
-        allArtistRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        allArtistRecyclerView.setHasFixedSize(true)
+        var allArtistRecyclerLayoutManager = LinearLayoutManager(view.context)
         allArtistRecyclerView.adapter = AllArtistsAdapter(cm.artists, this)
+        allArtistRecyclerView.layoutManager = allArtistRecyclerLayoutManager
+        allArtistRecyclerView.setHasFixedSize(true)
+
+        val fastScrollerView = view.findViewById<FastScrollerView>(R.id.fs_all_artists)
+        fastScrollerView.setupWithRecyclerView(
+            allArtistRecyclerView,
+            { position ->
+                val item = cm.artists[position] // Get your model object
+                // or fetch the section at [position] from your database
+                FastScrollItemIndicator.Text(
+                    item.name.substring(0, 1).uppercase() // Grab the first letter and capitalize it
+                ) // Return a text indicator
+            },
+            showIndicator = { indicator, indicatorPosition, totalIndicators ->
+                val text: FastScrollItemIndicator.Text = indicator as FastScrollItemIndicator.Text
+
+                "0ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(text.text)
+            }
+        )
+        fastScrollerView.useDefaultScroller = false
+        fastScrollerView.itemIndicatorSelectedCallbacks += object : FastScrollerView.ItemIndicatorSelectedCallback {
+            override fun onItemIndicatorSelected(
+                indicator: FastScrollItemIndicator,
+                indicatorCenterY: Int,
+                itemPosition: Int
+            ) {
+                allArtistRecyclerView.stopScroll()
+                allArtistRecyclerLayoutManager.scrollToPosition(itemPosition)
+            }
+        }
 
         return view
     }

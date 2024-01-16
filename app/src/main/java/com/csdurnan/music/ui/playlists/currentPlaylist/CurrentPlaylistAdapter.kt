@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupMenu
@@ -13,13 +14,18 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csdurnan.music.R
+import com.csdurnan.music.dc.Playlist
 import com.csdurnan.music.dc.Song
+import com.csdurnan.music.ui.playlists.NewPlaylistDirections
+import com.csdurnan.music.utils.database.PlaylistDatabase
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class CurrentPlaylistAdapter(
     var songs: List<Song>,
-    val fragment: CurrentPlaylist
+    val parentFragment: CurrentPlaylist
 ) : RecyclerView.Adapter<CurrentPlaylistAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -59,7 +65,7 @@ class CurrentPlaylistAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.songTitle.text = songs[position].title
         holder.songArtist.text = songs[position].artist
-        Glide.with(fragment)
+        Glide.with(parentFragment)
             .load(songs[position].imageUri)
             .placeholder(R.drawable.artwork_placeholder)
             .into(holder.songImage)
@@ -72,23 +78,38 @@ class CurrentPlaylistAdapter(
         holder.popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.remove_song -> {
-                    val builder = AlertDialog.Builder(fragment.context)
-                    builder
-                        .setTitle("Remove song?")
-                        .setPositiveButton("Confirm") {
-                                _, _ ->
+                    val builder =
+                        AlertDialog.Builder(parentFragment.requireContext(), R.style.WrapContentDialog)
+                    val dialogView = parentFragment.activity?.layoutInflater?.inflate(
+                        R.layout.dialog_remove_song,
+                        null
+                    )
+                    val dialog = builder.setView(dialogView).create()
+                    dialogView?.findViewById<TextView>(R.id.tv_remove_dismiss)
+                        ?.setOnClickListener {
+                            dialog.dismiss()
+                        }
+                    dialogView?.findViewById<TextView>(R.id.tv_remove_confirm)
+                        ?.setOnClickListener {
                             GlobalScope.launch {
-                                fragment.deletePlaylistSong(songs[position].id)
+                                parentFragment.deletePlaylistSong(songs[position].id)
                             }
-                        }
-                        .setNegativeButton("Cancel") {
-                                dialog, _ ->
-                            dialog.cancel()
+                            dialog.dismiss()
                         }
 
-                    val dialog = builder.create()
+                    val decorView = parentFragment.activity?.window?.decorView
+                    val rootView = decorView?.findViewById(R.id.nav_host_fragment) as ViewGroup
+                    val windowBackground = decorView.background
+
+                    val dialogBlurView = dialogView?.findViewById<BlurView>(R.id.dialog_remove_song)
+                    dialogBlurView?.setupWith(
+                        rootView,
+                        RenderScriptBlur(parentFragment.requireContext())
+                    )
+                        ?.setFrameClearDrawable(windowBackground)
+                        ?.setBlurRadius(3f)
+
                     dialog.show()
-
                     true
                 }
                 else -> false

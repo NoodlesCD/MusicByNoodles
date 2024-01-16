@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -17,8 +18,14 @@ import com.csdurnan.music.R
 import com.csdurnan.music.dc.Playlist
 import com.csdurnan.music.dc.Song
 import com.csdurnan.music.utils.database.PlaylistDatabase
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class NewPlaylistAdapter(
     private val songsToAdd: List<Song>,
@@ -61,34 +68,52 @@ class NewPlaylistAdapter(
                 .load(R.drawable.artwork_placeholder)
                 .into(holder.playlistImage)
 
-            val editText = EditText(parentFragment.requireContext())
-            val builder = AlertDialog.Builder(parentFragment.context)
-            builder
-                .setTitle("New playlist")
-                .setView(editText)
-                .setPositiveButton("Confirm") {
-                        _, _ ->
-                    val db = PlaylistDatabase.getInstance(parentFragment.requireContext())
-                    val pLDao = db.dao
-                    val playlist = Playlist(
-                        null,
-                        editText.text.toString(),
-                        songsToAdd.size,
-                        songsToAdd[0].imageUri,
-                        songsToAdd)
-                    GlobalScope.launch {
-                        pLDao.insertPlaylistAndSongs(playlist)
-                    }
-                    val action = NewPlaylistDirections.actionNewPlaylistToAllPlaylists()
-                    holder.currentRow.findNavController().navigate(action)
-                }
-                .setNegativeButton("Cancel") {
-                        dialog, _ ->
-                    dialog.cancel()
-                }
-
             holder.currentRow.setOnClickListener {
-                val dialog = builder.create()
+                val builder =
+                    AlertDialog.Builder(parentFragment.requireContext(), R.style.WrapContentDialog)
+                val dialogView = parentFragment.activity?.layoutInflater?.inflate(
+                    R.layout.dialog_new_playlist,
+                    null
+                )
+                val dialog = builder.setView(dialogView).create()
+                dialogView?.findViewById<TextView>(R.id.tv_new_playlist_dismiss)
+                    ?.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                dialogView?.findViewById<TextView>(R.id.tv_new_playlist_confirm)
+                    ?.setOnClickListener {
+                        val playlistInput = dialogView.findViewById<EditText>(R.id.et_new_playlist)
+
+                        val db = PlaylistDatabase.getInstance(parentFragment.requireContext())
+                        val pLDao = db.dao
+                        val playlist = Playlist(
+                            null,
+                            playlistInput.text.toString(),
+                            songsToAdd.size,
+                            songsToAdd[0].imageUri,
+                            songsToAdd
+                        )
+                        GlobalScope.launch {
+                            pLDao.insertPlaylistAndSongs(playlist)
+                        }
+                        val action = NewPlaylistDirections.actionNewPlaylistToAllPlaylists()
+                        holder.currentRow.findNavController().navigate(action)
+
+                        dialog.dismiss()
+                    }
+
+                val decorView = parentFragment.activity?.window?.decorView
+                val rootView = decorView?.findViewById(R.id.nav_host_fragment) as ViewGroup
+                val windowBackground = decorView.background
+
+                val dialogBlurView = dialogView?.findViewById<BlurView>(R.id.dialog_new_playlist)
+                dialogBlurView?.setupWith(
+                    rootView,
+                    RenderScriptBlur(parentFragment.requireContext())
+                )
+                    ?.setFrameClearDrawable(windowBackground)
+                    ?.setBlurRadius(3f)
+
                 dialog.show()
             }
 

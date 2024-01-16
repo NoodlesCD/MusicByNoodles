@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:text="TextView"
-            android:textColor="@color/list_font_large"
+            android:textColor="?attr/list_header"
             android:textSize="16sp"
             android:ellipsize="end"
             android:maxLines="1"/>
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textColor="@color/list_font_small"
+            android:textColor="?attr/list_description"
             android:textSize="13sp"
             android:ellipsize="end"
             android:maxLines="1"
@@ -53,7 +53,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/separator"
+        android:background="?attr/separator"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="20dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

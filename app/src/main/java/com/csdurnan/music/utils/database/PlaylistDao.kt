@@ -3,7 +3,6 @@ package com.csdurnan.music.utils.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
@@ -11,7 +10,6 @@ import com.csdurnan.music.dc.Playlist
 import com.csdurnan.music.dc.PlaylistSongCrossRef
 import com.csdurnan.music.dc.PlaylistWithSongs
 import com.csdurnan.music.dc.Song
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlaylistDao {
@@ -21,7 +19,6 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM playlists")
     fun getPlaylists(): LiveData<List<Playlist>>
-
 
     @Transaction
     @Query("SELECT * FROM playlists WHERE playlist_id = :id")

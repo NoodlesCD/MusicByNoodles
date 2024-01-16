@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/dialog_delete_playlist">
+    android:id="@+id/dialog_remove_song">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,12 +24,12 @@
             app:layout_constraintTop_toTopOf="parent"
             android:fontFamily="@font/noto_sans"
             android:includeFontPadding="false"
-            android:text="Delete playlist?"
+            android:text="Remove song?"
             android:textColor="?attr/list_header"
             android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/tv_delete_dismiss"
+            android:id="@+id/tv_remove_dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
@@ -38,17 +38,17 @@
             android:textColor="?attr/list_header"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_delete_confirm"
+            app:layout_constraintEnd_toStartOf="@+id/tv_remove_confirm"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"/>
 
         <TextView
-            android:id="@+id/tv_delete_confirm"
+            android:id="@+id/tv_remove_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
             android:includeFontPadding="false"
-            android:text="DELETE"
+            android:text="REMOVE"
             android:textColor="?attr/list_header"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"

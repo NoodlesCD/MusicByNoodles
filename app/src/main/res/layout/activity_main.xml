@@ -2,25 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity"
-    android:background="#0E0E0E">
+    android:background="?attr/main_background">
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/header_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/background_header"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:visibility="visible"
-        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_vertical"
+        android:visibility="visible"
+        android:elevation="5dp"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:background="?attr/header_background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -31,113 +30,110 @@
                 android:id="@+id/tv_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:fontFamily="@font/noto_sans"
-                android:includeFontPadding="false"
-                android:paddingLeft="20dp"
+                android:gravity="center"
                 android:text="@string/songs"
-                android:shadowColor="@color/black"
-                android:shadowRadius="15"
-                android:textColor="@color/list_font_large"
-                android:textSize="20sp"/>
-
+                android:fontFamily="@font/noto_sans"
+                android:textColor="?attr/header_title"
+                android:textSize="20sp"
+                android:includeFontPadding="false"
+                android:paddingStart="20dp"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#0E0E0E"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:layout_editor_absoluteX="20dp"/>
+                android:background="?attr/main_background" />
 
             <ImageView
                 android:id="@+id/iv_sleep_button"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/controls_sleep"
-                tools:layout_editor_absoluteX="305dp"
+                android:layout_marginEnd="20dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_settings_button"
-                android:layout_marginRight="20dp"/>
+                android:src="@drawable/controls_sleep"
+                android:contentDescription="@string/sleep_timer"
+                app:tint="?attr/header_title" />
 
             <ImageView
                 android:id="@+id/iv_settings_button"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/controls_settings"
-                tools:layout_editor_absoluteX="305dp"
+                android:layout_marginEnd="20dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginRight="20dp"/>
+                android:src="@drawable/controls_settings"
+                android:contentDescription="@string/settings"
+                app:tint="?attr/header_title"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </eightbitlab.com.blurview.BlurView>
 
 
     <ImageView
+        tools:ignore="ContentDescription"
+        android:id="@+id/current_song"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/current_song"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:alpha="0.1"/>
+        android:alpha="0.1" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
-        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
+        app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="@id/nav_host_fragment"
+        android:background="?attr/navigation_background"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_current_song_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginBottom="5dp"
-
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        android:layout_marginBottom="5dp"
+        android:elevation="10dp">
 
 
         <eightbitlab.com.blurview.BlurView
-            android:id="@+id/linearLayout3"
+            android:id="@+id/bv_current_song_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_current_song_bar"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:paddingTop="10dp"
             android:paddingBottom="0dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="visible"
             android:elevation="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-<!--        <ImageView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:id="@+id/current_song_bar_bg"-->
-<!--            android:adjustViewBounds="true"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:alpha="0.1"/>-->
+            android:background="?attr/current_song_background">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_current_song_image"
@@ -154,22 +150,22 @@
                 android:id="@+id/linearLayout5"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
-                android:orientation="vertical"
-                android:paddingLeft="60dp"
-                android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="@id/pb_current_song_progress"
                 app:layout_constraintStart_toEndOf="@id/iv_current_song_image"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:paddingStart="60dp"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/tv_current_song_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView"
+                    android:text="/?"
                     android:includeFontPadding="false"
-                    android:textColor="@color/list_font_large"
+                    android:textColor="?attr/list_header"
                     android:textSize="16sp"
                     android:gravity="center_vertical"/>
 
@@ -180,21 +176,19 @@
                     android:layout_weight="1"
                     android:text="TextView"
                     android:includeFontPadding="false"
-                    android:textColor="@color/list_font_small"
+                    android:textColor="?attr/list_description"
                     android:gravity="center_vertical"/>
             </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/pb_current_song_progress"
-                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_weight="1"
                 android:progress="0"
-                android:progressTint="#E3D9D9"
-                android:secondaryProgressTint="#ECD1D1"
-                android:layout_gravity="bottom"
-                tools:layout_editor_absoluteX="10dp" />
+                android:progressTint="?attr/progress_tint"
+                android:secondaryProgressTint="?attr/progress_tint"
+                android:layout_gravity="bottom" />
 
             <ImageView
                 android:id="@+id/iv_current_song_play_pause"
@@ -204,7 +198,8 @@
                 android:scaleType="center"
                 android:layout_gravity="end"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="-10dp"/>
+                android:layout_marginRight="-10dp"
+                app:tint="?attr/list_header" />
 
         </eightbitlab.com.blurview.BlurView>
 
@@ -214,18 +209,12 @@
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        app:itemIconTint="@color/navigation_item"
-        app:itemTextColor="@color/navigation_item"
-        android:background="#00000000"
+        app:itemIconTint="?attr/navigation"
+        app:itemTextColor="?attr/navigation"
+        app:elevation="0dp"
+        android:background="?attr/navigation_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/nav_host_fragment"
         app:menu="@menu/navigation_bottom_items"  />
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="@id/nav_host_fragment"
-        android:background="@drawable/navigation_background"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
